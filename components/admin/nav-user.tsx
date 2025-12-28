@@ -1,12 +1,12 @@
 "use client";
 
 import {
-	IconCreditCard,
-	IconDotsVertical,
-	IconLogout,
-	IconNotification,
-	IconUserCircle,
-} from "@tabler/icons-react";
+	TbCreditCard,
+	TbDotsVertical,
+	TbLogout,
+	TbNotification,
+	TbUserCircle,
+} from "react-icons/tb";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -62,7 +62,7 @@ export function NavUser({
 									{user.email}
 								</span>
 							</div>
-							<IconDotsVertical className="ml-auto size-4" />
+							<TbDotsVertical className="ml-auto size-4" />
 						</SidebarMenuButton>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent
@@ -95,21 +95,21 @@ export function NavUser({
 						<DropdownMenuSeparator />
 						<DropdownMenuGroup>
 							<DropdownMenuItem>
-								<IconUserCircle />
+								<TbUserCircle />
 								Account
 							</DropdownMenuItem>
 							<DropdownMenuItem>
-								<IconCreditCard />
+								<TbCreditCard />
 								Billing
 							</DropdownMenuItem>
 							<DropdownMenuItem>
-								<IconNotification />
+								<TbNotification />
 								Notifications
 							</DropdownMenuItem>
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem>
-							<IconLogout />
+							<TbLogout />
 							Log out
 						</DropdownMenuItem>
 					</DropdownMenuContent>

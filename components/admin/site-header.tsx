@@ -19,13 +19,8 @@ export function SiteHeader() {
 						size="sm"
 						className="hidden sm:flex"
 					>
-						<a
-							href="https://github.com/shadcn-ui/ui/tree/main/apps/v4/app/(examples)/dashboard"
-							rel="noopener noreferrer"
-							target="_blank"
-							className="dark:text-foreground"
-						>
-							GitHub
+						<a href="/" className="dark:text-foreground">
+							View Site
 						</a>
 					</Button>
 				</div>

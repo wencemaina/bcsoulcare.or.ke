@@ -1,4 +1,4 @@
-import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
+import { TbTrendingDown, TbTrendingUp } from "react-icons/tb";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -21,7 +21,7 @@ export function SectionCards() {
 					</CardTitle>
 					<CardAction>
 						<Badge variant="outline">
-							<IconTrendingUp />
+							<TbTrendingUp />
 							+12.5%
 						</Badge>
 					</CardAction>
@@ -29,7 +29,7 @@ export function SectionCards() {
 				<CardFooter className="flex-col items-start gap-1.5 text-sm">
 					<div className="line-clamp-1 flex gap-2 font-medium">
 						Trending up this month{" "}
-						<IconTrendingUp className="size-4" />
+						<TbTrendingUp className="size-4" />
 					</div>
 					<div className="text-muted-foreground">
 						Visitors for the last 6 months
@@ -44,7 +44,7 @@ export function SectionCards() {
 					</CardTitle>
 					<CardAction>
 						<Badge variant="outline">
-							<IconTrendingDown />
+							<TbTrendingDown />
 							-20%
 						</Badge>
 					</CardAction>
@@ -52,7 +52,7 @@ export function SectionCards() {
 				<CardFooter className="flex-col items-start gap-1.5 text-sm">
 					<div className="line-clamp-1 flex gap-2 font-medium">
 						Down 20% this period{" "}
-						<IconTrendingDown className="size-4" />
+						<TbTrendingDown className="size-4" />
 					</div>
 					<div className="text-muted-foreground">
 						Acquisition needs attention
@@ -67,7 +67,7 @@ export function SectionCards() {
 					</CardTitle>
 					<CardAction>
 						<Badge variant="outline">
-							<IconTrendingUp />
+							<TbTrendingUp />
 							+12.5%
 						</Badge>
 					</CardAction>
@@ -75,7 +75,7 @@ export function SectionCards() {
 				<CardFooter className="flex-col items-start gap-1.5 text-sm">
 					<div className="line-clamp-1 flex gap-2 font-medium">
 						Strong user retention{" "}
-						<IconTrendingUp className="size-4" />
+						<TbTrendingUp className="size-4" />
 					</div>
 					<div className="text-muted-foreground">
 						Engagement exceed targets
@@ -90,7 +90,7 @@ export function SectionCards() {
 					</CardTitle>
 					<CardAction>
 						<Badge variant="outline">
-							<IconTrendingUp />
+							<TbTrendingUp />
 							+4.5%
 						</Badge>
 					</CardAction>
@@ -98,7 +98,7 @@ export function SectionCards() {
 				<CardFooter className="flex-col items-start gap-1.5 text-sm">
 					<div className="line-clamp-1 flex gap-2 font-medium">
 						Steady performance increase{" "}
-						<IconTrendingUp className="size-4" />
+						<TbTrendingUp className="size-4" />
 					</div>
 					<div className="text-muted-foreground">
 						Meets growth projections

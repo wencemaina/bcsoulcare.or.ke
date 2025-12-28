@@ -2,22 +2,22 @@
 
 import * as React from "react";
 import {
-	IconCamera,
-	IconChartBar,
-	IconDashboard,
-	IconDatabase,
-	IconFileAi,
-	IconFileDescription,
-	IconFileWord,
-	IconFolder,
-	IconHelp,
-	IconInnerShadowTop,
-	IconListDetails,
-	IconReport,
-	IconSearch,
-	IconSettings,
-	IconUsers,
-} from "@tabler/icons-react";
+	TbCamera,
+	TbChartBar,
+	TbDashboard,
+	TbDatabase,
+	TbFileAi,
+	TbFileDescription,
+	TbFileWord,
+	TbFolder,
+	TbHelp,
+	TbInnerShadowTop,
+	TbListDetails,
+	TbReport,
+	TbSearch,
+	TbSettings,
+	TbUsers,
+} from "react-icons/tb";
 
 import { NavDocuments } from "@/components/admin/nav-documents";
 import { NavMain } from "@/components/admin/nav-main";
@@ -43,33 +43,33 @@ const data = {
 		{
 			title: "Dashboard",
 			url: "#",
-			icon: IconDashboard,
+			icon: TbDashboard,
 		},
 		{
 			title: "Lifecycle",
 			url: "#",
-			icon: IconListDetails,
+			icon: TbListDetails,
 		},
 		{
 			title: "Analytics",
 			url: "#",
-			icon: IconChartBar,
+			icon: TbChartBar,
 		},
 		{
 			title: "Projects",
 			url: "#",
-			icon: IconFolder,
+			icon: TbFolder,
 		},
 		{
 			title: "Team",
 			url: "#",
-			icon: IconUsers,
+			icon: TbUsers,
 		},
 	],
 	navClouds: [
 		{
 			title: "Capture",
-			icon: IconCamera,
+			icon: TbCamera,
 			isActive: true,
 			url: "#",
 			items: [
@@ -85,7 +85,7 @@ const data = {
 		},
 		{
 			title: "Proposal",
-			icon: IconFileDescription,
+			icon: TbFileDescription,
 			url: "#",
 			items: [
 				{
@@ -100,7 +100,7 @@ const data = {
 		},
 		{
 			title: "Prompts",
-			icon: IconFileAi,
+			icon: TbFileAi,
 			url: "#",
 			items: [
 				{
@@ -118,34 +118,34 @@ const data = {
 		{
 			title: "Settings",
 			url: "#",
-			icon: IconSettings,
+			icon: TbSettings,
 		},
 		{
 			title: "Get Help",
 			url: "#",
-			icon: IconHelp,
+			icon: TbHelp,
 		},
 		{
 			title: "Search",
 			url: "#",
-			icon: IconSearch,
+			icon: TbSearch,
 		},
 	],
 	documents: [
 		{
 			name: "Data Library",
 			url: "#",
-			icon: IconDatabase,
+			icon: TbDatabase,
 		},
 		{
 			name: "Reports",
 			url: "#",
-			icon: IconReport,
+			icon: TbReport,
 		},
 		{
 			name: "Word Assistant",
 			url: "#",
-			icon: IconFileWord,
+			icon: TbFileWord,
 		},
 	],
 };
@@ -161,7 +161,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 							className="data-[slot=sidebar-menu-button]:!p-1.5"
 						>
 							<a href="#">
-								<IconInnerShadowTop className="!size-5" />
+								<TbInnerShadowTop className="!size-5" />
 								<span className="text-base font-semibold">
 									Acme Inc.
 								</span>

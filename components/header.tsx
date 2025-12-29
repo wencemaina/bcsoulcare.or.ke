@@ -23,6 +23,7 @@ import {
 	SheetDescription,
 } from "@/components/ui/sheet";
 import { Menu, ChevronRight } from "lucide-react";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export function Header() {
 	const [isScrolled, setIsScrolled] = React.useState(false);
@@ -165,7 +166,7 @@ export function Header() {
 					</div>
 
 					{/* Desktop Navigation */}
-					<div className="hidden md:block">
+					<div className="hidden md:flex items-center gap-4">
 						<NavigationMenu>
 							<NavigationMenuList>
 								{navigation.map((item) => {
@@ -236,10 +237,12 @@ export function Header() {
 								})}
 							</NavigationMenuList>
 						</NavigationMenu>
+						<ModeToggle />
 					</div>
 
 					{/* Mobile Navigation */}
-					<div className="md:hidden">
+					<div className="md:hidden flex items-center gap-2">
+						<ModeToggle />
 						<Sheet open={isOpen} onOpenChange={setIsOpen}>
 							<SheetTrigger asChild>
 								<Button

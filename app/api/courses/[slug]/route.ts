@@ -15,7 +15,6 @@ export async function GET(
 		const course = await coursesCollection.findOne({
 			slug,
 			status: "published",
-			isPublished: true,
 		});
 
 		if (!course) {
@@ -30,7 +29,6 @@ export async function GET(
 			.find({
 				courseId: course.courseId,
 				status: "published",
-				isPublished: true,
 			})
 			.project({
 				lessonId: 1,

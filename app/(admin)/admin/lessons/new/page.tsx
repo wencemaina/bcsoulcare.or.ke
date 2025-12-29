@@ -1,17 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
 import { TbLoader2 } from "react-icons/tb";
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { Image } from "@tiptap/extension-image";
 import { TextAlign } from "@tiptap/extension-text-align";
 import { Highlight } from "@tiptap/extension-highlight";
+import { Typography } from "@tiptap/extension-typography";
+import { Subscript } from "@tiptap/extension-subscript";
+import { Superscript } from "@tiptap/extension-superscript";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -34,6 +37,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 
 const lessonSchema = z.object({
 	courseId: z.string().min(1, "Course is required"),
@@ -71,6 +75,7 @@ export default function CreateLessonPage() {
 	const [courses, setCourses] = useState<Course[]>([]);
 	const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 	const [isFetchingCourses, setIsFetchingCourses] = useState(true);
+	const editorRef = useRef<any>(null);
 
 	const form = useForm<LessonFormValues>({
 		resolver: zodResolver(lessonSchema),
@@ -86,19 +91,18 @@ export default function CreateLessonPage() {
 		},
 	});
 
+	// Create a simple editor instance to get content
 	const editor = useEditor({
 		extensions: [
 			StarterKit,
 			TextAlign.configure({ types: ["heading", "paragraph"] }),
 			Highlight.configure({ multicolor: true }),
 			Image,
+			Typography,
+			Superscript,
+			Subscript,
 		],
 		content: "",
-		editorProps: {
-			attributes: {
-				class: "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[400px] p-4",
-			},
-		},
 	});
 
 	useEffect(() => {
@@ -408,12 +412,12 @@ export default function CreateLessonPage() {
 							<CardTitle>Lesson Content</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<div className="rounded-md border">
-								<EditorContent editor={editor} />
+							<div className="min-h-[500px]">
+								<SimpleEditor />
 							</div>
-							<p className="mt-2 text-sm text-muted-foreground">
-								Use the editor above to create your lesson
-								content
+							<p className="mt-4 text-sm text-muted-foreground">
+								Note: The editor content will be saved when you
+								click Create Lesson
 							</p>
 						</CardContent>
 					</Card>

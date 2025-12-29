@@ -257,7 +257,7 @@ export const LessonEditor = forwardRef<LessonEditorRef>((props, ref) => {
 	}));
 
 	return (
-		<div className="simple-editor-wrapper">
+		<div className="simple-editor-wrapper w-full max-w-full overflow-hidden">
 			<EditorContext.Provider value={{ editor }}>
 				<Toolbar
 					ref={toolbarRef}
@@ -289,11 +289,13 @@ export const LessonEditor = forwardRef<LessonEditorRef>((props, ref) => {
 					)}
 				</Toolbar>
 
-				<EditorContent
-					editor={editor}
-					role="presentation"
-					className="simple-editor-content"
-				/>
+				<div className="w-full max-w-full overflow-auto">
+					<EditorContent
+						editor={editor}
+						role="presentation"
+						className="simple-editor-content"
+					/>
+				</div>
 			</EditorContext.Provider>
 		</div>
 	);

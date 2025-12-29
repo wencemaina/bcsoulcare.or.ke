@@ -7,14 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
 import { TbLoader2 } from "react-icons/tb";
-import { useEditor } from "@tiptap/react";
-import { StarterKit } from "@tiptap/starter-kit";
-import { Image } from "@tiptap/extension-image";
-import { TextAlign } from "@tiptap/extension-text-align";
-import { Highlight } from "@tiptap/extension-highlight";
-import { Typography } from "@tiptap/extension-typography";
-import { Subscript } from "@tiptap/extension-subscript";
-import { Superscript } from "@tiptap/extension-superscript";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -37,7 +29,10 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
+import {
+	LessonEditor,
+	type LessonEditorRef,
+} from "@/components/admin/lesson-editor";
 
 const lessonSchema = z.object({
 	courseId: z.string().min(1, "Course is required"),
@@ -75,7 +70,7 @@ export default function CreateLessonPage() {
 	const [courses, setCourses] = useState<Course[]>([]);
 	const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 	const [isFetchingCourses, setIsFetchingCourses] = useState(true);
-	const editorRef = useRef<any>(null);
+	const editorRef = useRef<LessonEditorRef>(null);
 
 	const form = useForm<LessonFormValues>({
 		resolver: zodResolver(lessonSchema),
@@ -89,20 +84,6 @@ export default function CreateLessonPage() {
 			duration: 0,
 			status: "draft",
 		},
-	});
-
-	// Create a simple editor instance to get content
-	const editor = useEditor({
-		extensions: [
-			StarterKit,
-			TextAlign.configure({ types: ["heading", "paragraph"] }),
-			Highlight.configure({ multicolor: true }),
-			Image,
-			Typography,
-			Superscript,
-			Subscript,
-		],
-		content: "",
 	});
 
 	useEffect(() => {
@@ -126,12 +107,12 @@ export default function CreateLessonPage() {
 	}
 
 	async function onSubmit(data: LessonFormValues) {
-		if (!editor) {
+		if (!editorRef.current) {
 			toast.error("Editor not initialized");
 			return;
 		}
 
-		const content = editor.getHTML();
+		const content = editorRef.current.getHTML();
 		if (!content || content === "<p></p>") {
 			toast.error("Lesson content is required");
 			return;
@@ -189,6 +170,7 @@ export default function CreateLessonPage() {
 			</div>
 			<Separator />
 
+			{/* Metadata Form */}
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
@@ -406,22 +388,6 @@ export default function CreateLessonPage() {
 						</CardContent>
 					</Card>
 
-					{/* Lesson Content */}
-					<Card>
-						<CardHeader>
-							<CardTitle>Lesson Content</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<div className="min-h-[500px]">
-								<SimpleEditor />
-							</div>
-							<p className="mt-4 text-sm text-muted-foreground">
-								Note: The editor content will be saved when you
-								click Create Lesson
-							</p>
-						</CardContent>
-					</Card>
-
 					<div className="flex justify-end gap-4">
 						<Button
 							type="button"
@@ -440,6 +406,16 @@ export default function CreateLessonPage() {
 					</div>
 				</form>
 			</Form>
+
+			{/* Lesson Content Editor */}
+			<Card>
+				<CardHeader>
+					<CardTitle>Lesson Content</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<LessonEditor ref={editorRef} />
+				</CardContent>
+			</Card>
 		</div>
 	);
 }

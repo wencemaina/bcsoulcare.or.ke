@@ -412,8 +412,10 @@ export default function CreateLessonPage() {
 				<CardHeader>
 					<CardTitle>Lesson Content</CardTitle>
 				</CardHeader>
-				<CardContent>
-					<LessonEditor ref={editorRef} />
+				<CardContent className="overflow-hidden">
+					<div className="w-full max-w-full">
+						<LessonEditor ref={editorRef} />
+					</div>
 				</CardContent>
 			</Card>
 		</div>

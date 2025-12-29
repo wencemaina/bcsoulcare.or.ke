@@ -468,26 +468,6 @@ export default function CreateCoursePage() {
 									</FormItem>
 								)}
 							/>
-							{form.watch("accessType") === "paid" && (
-								<FormField
-									control={form.control}
-									name="price"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Price (KES)</FormLabel>
-											<FormControl>
-												<Input
-													type="number"
-													step="0.01"
-													placeholder="99.99"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-							)}
 						</CardContent>
 					</Card>
 

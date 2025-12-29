@@ -107,7 +107,7 @@ export default function StaffPage() {
           </div>
         </section>
       </main>
-      <Footer />
+     
     </div>
   )
 }

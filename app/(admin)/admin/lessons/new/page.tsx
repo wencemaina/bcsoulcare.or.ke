@@ -92,16 +92,28 @@ export default function CreateLessonPage() {
 
 	async function fetchCourses() {
 		try {
+			setIsFetchingCourses(true);
 			const response = await fetch("/api/admin/lessons/courses");
 			if (!response.ok) {
-				throw new Error("Failed to fetch courses");
+				throw new Error(`HTTP error! status: ${response.status}`);
 			}
 			const data = await response.json();
-			console.log("Fetched courses data:", data);
-			console.log("Courses array:", data.courses);
-			setCourses(data.courses || []);
+			console.log("CreateLessonPage: Fetched data:", data);
+
+			if (data.courses && Array.isArray(data.courses)) {
+				console.log(
+					`CreateLessonPage: Loaded ${data.courses.length} courses`,
+				);
+				setCourses(data.courses);
+			} else {
+				console.warn(
+					"CreateLessonPage: courses data is missing or not an array:",
+					data,
+				);
+				setCourses([]);
+			}
 		} catch (error) {
-			console.error(error);
+			console.error("CreateLessonPage: Error fetching courses:", error);
 			toast.error("Failed to load courses");
 		} finally {
 			setIsFetchingCourses(false);
@@ -154,11 +166,24 @@ export default function CreateLessonPage() {
 	}
 
 	const handleCourseChange = (courseId: string) => {
-		console.log("Course changed to:", courseId);
+		console.log("CreateLessonPage: Selected Course ID:", courseId);
 		const course = courses.find((c) => c.courseId === courseId);
-		console.log("Found course:", course);
-		console.log("Course modules:", course?.modules);
-		setSelectedCourse(course || null);
+
+		if (course) {
+			console.log("CreateLessonPage: Found Course:", course.title);
+			console.log(
+				"CreateLessonPage: Modules count:",
+				course.modules?.length || 0,
+			);
+			setSelectedCourse(course);
+		} else {
+			console.error(
+				"CreateLessonPage: Course not found in state:",
+				courseId,
+			);
+			setSelectedCourse(null);
+		}
+
 		form.setValue("courseId", courseId);
 		form.setValue("moduleId", ""); // Reset module selection
 	};

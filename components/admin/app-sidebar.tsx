@@ -103,8 +103,7 @@ const data = {
 				},
 			],
 		},
-			],
-		},
+
 		{
 			label: "Events",
 			items: [

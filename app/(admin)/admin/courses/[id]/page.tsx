@@ -518,31 +518,33 @@ export default function EditCoursePage() {
 								control={form.control}
 								name="accessType"
 								render={({ field }) => (
-									<FormItem>
+									<FormItem className="md:col-span-2">
 										<FormLabel>Access Type</FormLabel>
-										<Select
-											onValueChange={field.onChange}
-											defaultValue={field.value}
-										>
-											<FormControl>
+										<FormControl>
+											<Select
+												onValueChange={field.onChange}
+												defaultValue={field.value}
+											>
 												<SelectTrigger>
 													<SelectValue placeholder="Select access type" />
 												</SelectTrigger>
-											</FormControl>
-											<SelectContent>
-												<SelectItem value="free">
-													Free
-												</SelectItem>
-												<SelectItem value="membership">
-													Membership Only
-												</SelectItem>
-												<SelectItem value="paid">
-													Paid
-												</SelectItem>
-											</SelectContent>
-										</Select>
+												<SelectContent>
+													<SelectItem value="free">
+														Free - Anyone can access
+													</SelectItem>
+													<SelectItem value="membership">
+														Membership Required -
+														Requires active
+														membership
+													</SelectItem>
+													<SelectItem value="paid">
+														Paid - One-time purchase
+													</SelectItem>
+												</SelectContent>
+											</Select>
+										</FormControl>
 										<FormDescription>
-											Who can access this course
+											Choose who can access this course
 										</FormDescription>
 										<FormMessage />
 									</FormItem>

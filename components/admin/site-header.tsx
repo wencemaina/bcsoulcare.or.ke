@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export function SiteHeader() {
 	return (
@@ -24,6 +25,7 @@ export function SiteHeader() {
 							View Site
 						</Link>
 					</Button>
+					<ModeToggle />
 				</div>
 			</div>
 		</header>

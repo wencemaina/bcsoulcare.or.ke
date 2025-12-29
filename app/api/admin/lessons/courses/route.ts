@@ -12,10 +12,16 @@ export async function GET() {
 			.project({
 				courseId: 1,
 				title: 1,
-				modules: 1,
+				modules: 1, // Include modules array
 			})
 			.sort({ title: 1 })
 			.toArray();
+
+		// Log to debug
+		console.log("Fetched courses:", courses.length);
+		if (courses.length > 0) {
+			console.log("First course modules:", courses[0].modules);
+		}
 
 		return NextResponse.json({ courses });
 	} catch (error) {

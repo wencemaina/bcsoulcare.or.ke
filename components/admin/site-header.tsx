@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import Link from "next/link";
 
 export function SiteHeader() {
 	return (
@@ -19,9 +20,9 @@ export function SiteHeader() {
 						size="sm"
 						className="hidden sm:flex"
 					>
-						<a href="/" className="dark:text-foreground">
+						<Link href="/" className="dark:text-foreground">
 							View Site
-						</a>
+						</Link>
 					</Button>
 				</div>
 			</div>

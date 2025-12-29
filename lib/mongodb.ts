@@ -140,3 +140,30 @@ export interface Lesson {
 	createdBy: ObjectId; // admin user ID
 	lastModifiedBy: ObjectId;
 }
+
+export interface Event {
+	_id?: ObjectId;
+	eventId: string; // Custom unique ID
+	title: string;
+	slug: string;
+	category: "workshop" | "retreat" | "fellowship" | "service" | "study";
+	date: Date; // Event date
+	startTime: string; // e.g., "9:00 AM"
+	endTime: string; // e.g., "5:00 PM"
+	location: string;
+	description: string;
+	image: string; // URL from R2 storage
+	maxSpots: number; // Maximum attendees
+	registeredCount: number; // Current registrations
+	price: number; // Event cost (0 for free)
+	isFeatured: boolean; // Show in featured section
+
+	status: "draft" | "published" | "archived";
+	isPublished: boolean;
+	publishedAt?: Date;
+
+	createdAt: Date;
+	updatedAt: Date;
+	createdBy: ObjectId; // admin user ID
+	lastModifiedBy: ObjectId;
+}

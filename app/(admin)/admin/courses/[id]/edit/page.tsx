@@ -63,10 +63,15 @@ const courseSchema = z.object({
 
 type CourseFormValues = z.infer<typeof courseSchema>;
 
-export default function EditCoursePage({ params }: { params: { id: string } }) {
+export default function EditCoursePage({
+	params,
+}: {
+	params: Promise<{ id: string }>;
+}) {
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
 	const [isFetching, setIsFetching] = useState(true);
+	const [courseId, setCourseId] = useState<string>("");
 
 	const form = useForm<CourseFormValues>({
 		resolver: zodResolver(courseSchema),
@@ -109,8 +114,14 @@ export default function EditCoursePage({ params }: { params: { id: string } }) {
 	});
 
 	useEffect(() => {
-		fetchCourse();
-	}, [params.id]);
+		params.then((p) => setCourseId(p.id));
+	}, [params]);
+
+	useEffect(() => {
+		if (courseId) {
+			fetchCourse();
+		}
+	}, [courseId]);
 
 	async function fetchCourse() {
 		try {

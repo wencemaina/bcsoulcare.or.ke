@@ -8,6 +8,31 @@ function generateLessonId(): string {
 	return randomBytes(4).toString("hex");
 }
 
+export async function GET(req: NextRequest) {
+	try {
+		const { searchParams } = new URL(req.url);
+		const courseId = searchParams.get("courseId");
+
+		const db = await connectToDatabase();
+		const lessonsCollection = db.collection("lessons");
+
+		const query = courseId ? { courseId } : {};
+
+		const lessons = await lessonsCollection
+			.find(query)
+			.sort({ courseId: 1, moduleId: 1, order: 1 })
+			.toArray();
+
+		return NextResponse.json({ lessons });
+	} catch (error) {
+		console.error("Error fetching lessons:", error);
+		return NextResponse.json(
+			{ error: "Internal Server Error" },
+			{ status: 500 },
+		);
+	}
+}
+
 export async function POST(req: NextRequest) {
 	try {
 		const {

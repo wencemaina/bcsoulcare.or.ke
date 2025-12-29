@@ -3,7 +3,6 @@
 import type React from "react";
 
 import { useState } from "react";
-;
 import {
 	Card,
 	CardContent,
@@ -260,7 +259,6 @@ export default function GetInvolvedPage() {
 
 	return (
 		<div className="min-h-screen">
-			<Header />
 			<main>
 				{/* Hero Section */}
 				<section className="bg-gradient-to-b from-primary/5 to-background py-16">

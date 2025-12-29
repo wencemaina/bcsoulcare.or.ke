@@ -4,10 +4,10 @@ import { ObjectId } from "mongodb";
 
 export async function GET(
 	req: NextRequest,
-	{ params }: { params: { id: string } },
+	{ params }: { params: Promise<{ id: string }> },
 ) {
 	try {
-		const { id } = params;
+		const { id } = await params;
 		const db = await connectToDatabase();
 		const coursesCollection = db.collection("courses");
 
@@ -32,10 +32,10 @@ export async function GET(
 
 export async function PUT(
 	req: NextRequest,
-	{ params }: { params: { id: string } },
+	{ params }: { params: Promise<{ id: string }> },
 ) {
 	try {
-		const { id } = params;
+		const { id } = await params;
 		const updateData = await req.json();
 
 		const db = await connectToDatabase();

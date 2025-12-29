@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
 	Card,
 	CardContent,
@@ -24,6 +24,8 @@ import {
 export default function EventsPage() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [selectedCategory, setSelectedCategory] = useState("all");
+	const [events, setEvents] = useState<any[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
 
 	const categories = [
 		{ value: "all", label: "All Events" },
@@ -34,98 +36,24 @@ export default function EventsPage() {
 		{ value: "study", label: "Bible Studies" },
 	];
 
-	const events = [
-		{
-			id: 1,
-			title: "Spring Spiritual Retreat",
-			category: "retreat",
-			date: "2024-04-15",
-			time: "9:00 AM - 5:00 PM",
-			location: "Ngong Hills Retreat Center", // Updated to Kenyan location
-			description:
-				"A day of reflection, prayer, and spiritual renewal in a beautiful mountain setting.",
-			spots: 25,
-			registered: 18,
-			price: "Ksh 3,600",
-			image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-			featured: true,
-		},
-		{
-			id: 2,
-			title: "Marriage Enrichment Workshop",
-			category: "workshop",
-			date: "2024-03-22",
-			time: "7:00 PM - 9:00 PM",
-			location: "CCMWA Main Building", // Updated organization name to CCMWA
-			description:
-				"Strengthen your marriage with practical tools and biblical wisdom.",
-			spots: 20,
-			registered: 12,
-			price: "Free",
-			image: "/couple-workshop.jpg",
-			featured: false,
-		},
-		{
-			id: 3,
-			title: "Community Service Day",
-			category: "service",
-			date: "2024-03-30",
-			time: "8:00 AM - 4:00 PM",
-			location: "Kibera Community Center", // Updated to Kenyan location
-			description:
-				"Join us in serving our community by volunteering at the local food bank.",
-			spots: 30,
-			registered: 22,
-			price: "Free",
-			image: "/community-service.jpg",
-			featured: false,
-		},
-		{
-			id: 4,
-			title: "Young Adults Fellowship Night",
-			category: "fellowship",
-			date: "2024-03-28",
-			time: "6:30 PM - 9:00 PM",
-			location: "CCMWA Youth Center", // Updated organization name to CCMWA
-			description:
-				"Connect with other young adults through games, food, and meaningful conversation.",
-			spots: 40,
-			registered: 35,
-			price: "Ksh 800",
-			image: "/young-adults.jpg",
-			featured: false,
-		},
-		{
-			id: 5,
-			title: "Women's Bible Study Intensive",
-			category: "study",
-			date: "2024-04-05",
-			time: "9:00 AM - 12:00 PM",
-			location: "CCMWA Conference Room", // Updated organization name to CCMWA
-			description:
-				"Deep dive into the book of Philippians with discussion and application.",
-			spots: 15,
-			registered: 8,
-			price: "Ksh 2,000",
-			image: "https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-			featured: true,
-		},
-		{
-			id: 6,
-			title: "Men's Prayer Breakfast",
-			category: "fellowship",
-			date: "2024-03-25",
-			time: "7:00 AM - 8:30 AM",
-			location: "CCMWA Fellowship Hall", // Updated organization name to CCMWA
-			description:
-				"Start your Saturday with fellowship, prayer, and a hearty breakfast.",
-			spots: 25,
-			registered: 20,
-			price: "Ksh 640",
-			image: "/mens-breakfast.jpg",
-			featured: false,
-		},
-	];
+	useEffect(() => {
+		fetchEvents();
+	}, []);
+
+	async function fetchEvents() {
+		try {
+			const response = await fetch("/api/events");
+			if (!response.ok) {
+				throw new Error("Failed to fetch events");
+			}
+			const data = await response.json();
+			setEvents(data.events || []);
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setIsLoading(false);
+		}
+	}
 
 	const filteredEvents = events.filter((event) => {
 		const matchesSearch =
@@ -136,7 +64,7 @@ export default function EventsPage() {
 		return matchesSearch && matchesCategory;
 	});
 
-	const featuredEvents = events.filter((event) => event.featured);
+	const featuredEvents = events.filter((event) => event.isFeatured);
 
 	const getCategoryColor = (category: string) => {
 		const colors = {
@@ -225,7 +153,10 @@ export default function EventsPage() {
 												</div>
 												<div className="flex items-center gap-2">
 													<Clock className="h-4 w-4 text-muted-foreground" />
-													<span>{event.time}</span>
+													<span>
+														{event.startTime} -{" "}
+														{event.endTime}
+													</span>
 												</div>
 												<div className="flex items-center gap-2">
 													<MapPin className="h-4 w-4 text-muted-foreground" />
@@ -236,14 +167,17 @@ export default function EventsPage() {
 												<div className="flex items-center gap-2">
 													<Users className="h-4 w-4 text-muted-foreground" />
 													<span>
-														{event.registered}/
-														{event.spots} registered
+														{event.registeredCount}/
+														{event.maxSpots}{" "}
+														registered
 													</span>
 												</div>
 											</div>
 											<div className="flex items-center justify-between">
 												<span className="text-lg font-semibold text-primary">
-													{event.price}
+													{event.price === 0
+														? "Free"
+														: `KES ${event.price}`}
 												</span>
 												<Button className="flex items-center gap-2">
 													Register Now
@@ -324,7 +258,9 @@ export default function EventsPage() {
 												}
 											</Badge>
 											<span className="text-sm font-semibold text-primary">
-												{event.price}
+												{event.price === 0
+													? "Free"
+													: `KES ${event.price}`}
 											</span>
 										</div>
 										<CardTitle className="text-lg">
@@ -346,7 +282,10 @@ export default function EventsPage() {
 											</div>
 											<div className="flex items-center gap-2">
 												<Clock className="h-4 w-4 text-muted-foreground" />
-												<span>{event.time}</span>
+												<span>
+													{event.startTime} -{" "}
+													{event.endTime}
+												</span>
 											</div>
 											<div className="flex items-center gap-2">
 												<MapPin className="h-4 w-4 text-muted-foreground" />
@@ -357,8 +296,8 @@ export default function EventsPage() {
 											<div className="flex items-center gap-2">
 												<Users className="h-4 w-4 text-muted-foreground" />
 												<span>
-													{event.registered}/
-													{event.spots} spots
+													{event.registeredCount}/
+													{event.maxSpots} spots
 												</span>
 											</div>
 										</div>

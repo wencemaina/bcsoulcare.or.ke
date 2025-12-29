@@ -6,9 +6,9 @@ export async function GET() {
 		const db = await connectToDatabase();
 		const coursesCollection = db.collection("courses");
 
-		// Fetch courses that are draft or published (exclude archived)
+		// Fetch all courses for lesson creation
 		const courses = await coursesCollection
-			.find({ status: { $in: ["draft", "published"] } })
+			.find({})
 			.project({
 				courseId: 1,
 				title: 1,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import Image from "next/image";
 import {
 	TbClock,
@@ -60,19 +60,12 @@ interface Course {
 	reviewCount: number;
 }
 
-export default function CoursePage({
-	params,
-}: {
-	params: Promise<{ slug: string }>;
-}) {
+export default function CoursePage() {
 	const router = useRouter();
+	const params = useParams();
+	const slug = params.slug as string;
 	const [course, setCourse] = useState<Course | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
-	const [slug, setSlug] = useState<string>("");
-
-	useEffect(() => {
-		params.then((p) => setSlug(p.slug));
-	}, [params]);
 
 	useEffect(() => {
 		if (slug) {

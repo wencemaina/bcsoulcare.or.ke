@@ -6,9 +6,9 @@ export async function GET() {
 		const db = await connectToDatabase();
 		const coursesCollection = db.collection("courses");
 
-		// Fetch only necessary fields for the dropdown
+		// Fetch courses that are draft or published (exclude archived)
 		const courses = await coursesCollection
-			.find({ status: { $ne: "archived" } })
+			.find({ status: { $in: ["draft", "published"] } })
 			.project({
 				courseId: 1,
 				title: 1,

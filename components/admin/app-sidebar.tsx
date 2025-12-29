@@ -11,7 +11,6 @@ import {
 	TbFileWord,
 	TbFolder,
 	TbHelp,
-	TbInnerShadowTop,
 	TbListDetails,
 	TbReport,
 	TbSearch,
@@ -161,9 +160,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 							className="data-[slot=sidebar-menu-button]:!p-1.5"
 						>
 							<a href="#">
-								<TbInnerShadowTop className="!size-5" />
 								<span className="text-base font-semibold">
-									Admin
+									CCMWA
 								</span>
 							</a>
 						</SidebarMenuButton>

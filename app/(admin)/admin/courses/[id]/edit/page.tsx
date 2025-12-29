@@ -3,7 +3,7 @@
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { TbPlus, TbTrash, TbLoader2 } from "react-icons/tb";
@@ -63,15 +63,12 @@ const courseSchema = z.object({
 
 type CourseFormValues = z.infer<typeof courseSchema>;
 
-export default function EditCoursePage({
-	params,
-}: {
-	params: Promise<{ id: string }>;
-}) {
+export default function EditCoursePage() {
 	const router = useRouter();
+	const params = useParams();
+	const courseId = params.id as string;
 	const [isLoading, setIsLoading] = useState(false);
 	const [isFetching, setIsFetching] = useState(true);
-	const [courseId, setCourseId] = useState<string>("");
 
 	const form = useForm<CourseFormValues>({
 		resolver: zodResolver(courseSchema),
@@ -114,10 +111,6 @@ export default function EditCoursePage({
 	});
 
 	useEffect(() => {
-		params.then((p) => setCourseId(p.id));
-	}, [params]);
-
-	useEffect(() => {
 		if (courseId) {
 			fetchCourse();
 		}
@@ -125,7 +118,7 @@ export default function EditCoursePage({
 
 	async function fetchCourse() {
 		try {
-			const response = await fetch(`/api/admin/courses/${params.id}`);
+			const response = await fetch(`/api/admin/courses/${courseId}`);
 			if (!response.ok) {
 				throw new Error("Failed to fetch course");
 			}
@@ -206,7 +199,7 @@ export default function EditCoursePage({
 				learningOutcomes: outcomesArray,
 			};
 
-			const response = await fetch(`/api/admin/courses/${params.id}`, {
+			const response = await fetch(`/api/admin/courses/${courseId}`, {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",

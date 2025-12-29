@@ -103,6 +103,23 @@ const data = {
 				},
 			],
 		},
+			],
+		},
+		{
+			label: "Events",
+			items: [
+				{
+					title: "All Events",
+					url: "/admin/events",
+					icon: TbCalendarEvent,
+				},
+				{
+					title: "Create Event",
+					url: "/admin/events/new",
+					icon: TbCalendarEvent,
+				},
+			],
+		},
 		{
 			label: "Courses",
 			items: [

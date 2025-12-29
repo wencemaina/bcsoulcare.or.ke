@@ -97,6 +97,8 @@ export default function CreateLessonPage() {
 				throw new Error("Failed to fetch courses");
 			}
 			const data = await response.json();
+			console.log("Fetched courses data:", data);
+			console.log("Courses array:", data.courses);
 			setCourses(data.courses || []);
 		} catch (error) {
 			console.error(error);
@@ -152,7 +154,10 @@ export default function CreateLessonPage() {
 	}
 
 	const handleCourseChange = (courseId: string) => {
+		console.log("Course changed to:", courseId);
 		const course = courses.find((c) => c.courseId === courseId);
+		console.log("Found course:", course);
+		console.log("Course modules:", course?.modules);
 		setSelectedCourse(course || null);
 		form.setValue("courseId", courseId);
 		form.setValue("moduleId", ""); // Reset module selection

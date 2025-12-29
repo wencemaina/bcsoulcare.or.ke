@@ -3,10 +3,10 @@ import { connectToDatabase } from "@/lib/mongodb";
 
 export async function GET(
 	req: NextRequest,
-	{ params }: { params: { slug: string } },
+	{ params }: { params: Promise<{ slug: string }> },
 ) {
 	try {
-		const { slug } = params;
+		const { slug } = await params;
 		const db = await connectToDatabase();
 		const lessonsCollection = db.collection("lessons");
 

@@ -171,7 +171,7 @@ export default function CoursesPage() {
 													size="icon"
 													onClick={() =>
 														router.push(
-															`/admin/courses/${course.courseId}/edit`,
+															`/admin/courses/${course.courseId}`,
 														)
 													}
 												>

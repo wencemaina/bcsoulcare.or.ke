@@ -60,14 +60,25 @@ interface Course {
 	reviewCount: number;
 }
 
-export default function CoursePage({ params }: { params: { slug: string } }) {
+export default function CoursePage({
+	params,
+}: {
+	params: Promise<{ slug: string }>;
+}) {
 	const router = useRouter();
 	const [course, setCourse] = useState<Course | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
+	const [slug, setSlug] = useState<string>("");
 
 	useEffect(() => {
-		fetchCourse();
-	}, [params.slug]);
+		params.then((p) => setSlug(p.slug));
+	}, [params]);
+
+	useEffect(() => {
+		if (slug) {
+			fetchCourse();
+		}
+	}, [slug]);
 
 	async function fetchCourse() {
 		try {

@@ -92,6 +92,7 @@ export function Header() {
 			],
 		},
 		{ name: "Soul Care", href: "/soul-care" },
+		{ name: "Courses", href: "/courses" },
 		{ name: "Resources", href: "/resources" },
 		{ name: "Events", href: "/events" },
 		{

@@ -7,7 +7,7 @@ export async function GET() {
 		const coursesCollection = db.collection("courses");
 
 		const courses = await coursesCollection
-			.find({ status: "published", isPublished: true })
+			.find({ status: "published" })
 			.project({
 				courseId: 1,
 				title: 1,

@@ -39,7 +39,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				if (user.role !== "admin" && user.membershipTierId) {
 					tierInfo = await db
 						.collection<MembershipTier>("membership_tiers")
-						.findOne({ _id: user.membershipTierId });
+						.findOne({ tierId: user.membershipTierId });
 				}
 
 				return {

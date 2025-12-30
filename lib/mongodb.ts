@@ -56,6 +56,7 @@ export interface User {
 	role: "admin" | "user";
 	isActive?: boolean;
 	isVerified?: boolean;
+	membershipTierId?: ObjectId;
 	createdAt: Date;
 	updatedAt: Date;
 }

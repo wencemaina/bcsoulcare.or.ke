@@ -1,12 +1,25 @@
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 import { AppSidebar } from "@/components/admin/app-sidebar";
 import { SiteHeader } from "@/components/admin/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
-export default function AdminLayout({
+export default async function AdminLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
+	const session = await auth();
+
+	if (!session) {
+		redirect("/auth/login");
+	}
+
+	// @ts-ignore
+	if (session.user?.role !== "admin") {
+		redirect("/");
+	}
+
 	return (
 		<SidebarProvider
 			style={

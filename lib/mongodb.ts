@@ -167,3 +167,18 @@ export interface Event {
 	createdBy: ObjectId; // admin user ID
 	lastModifiedBy: ObjectId;
 }
+
+export interface MembershipTier {
+	_id?: ObjectId;
+	tierId: string; // Custom unique ID
+	name: string;
+	description: string;
+	price: number;
+	billingCycle: "monthly" | "yearly" | "one-time";
+	features: string[]; // List of benefits
+	status: "active" | "archived";
+	subscribersCount: number;
+
+	createdAt: Date;
+	updatedAt: Date;
+}

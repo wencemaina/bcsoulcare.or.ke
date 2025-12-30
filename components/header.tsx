@@ -13,6 +13,7 @@ import {
 	NavigationMenuTrigger,
 	navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import {
 	Sheet,
@@ -22,13 +23,15 @@ import {
 	SheetTitle,
 	SheetDescription,
 } from "@/components/ui/sheet";
-import { Menu, ChevronRight } from "lucide-react";
+import { Menu, ChevronRight, User } from "lucide-react";
 import { ModeToggle } from "@/components/mode-toggle";
+import { useAuth } from "@/lib/auth-context";
 
 export function Header() {
 	const [isScrolled, setIsScrolled] = React.useState(false);
 	const pathname = usePathname();
 	const [isOpen, setIsOpen] = React.useState(false);
+	const { user, isLoading } = useAuth();
 
 	React.useEffect(() => {
 		const handleScroll = () => {
@@ -235,6 +238,36 @@ export function Header() {
 								})}
 							</NavigationMenuList>
 						</NavigationMenu>
+						<Separator orientation="vertical" className="h-6" />
+						{!isLoading && (
+							<div className="flex items-center gap-2">
+								{user ? (
+									<Button asChild variant="outline" size="sm">
+										<Link href="/user-account">
+											<User className="mr-2 h-4 w-4" />
+											Account
+										</Link>
+									</Button>
+								) : (
+									<>
+										<Button
+											asChild
+											variant="ghost"
+											size="sm"
+										>
+											<Link href="/auth/login">
+												Login
+											</Link>
+										</Button>
+										<Button asChild size="sm">
+											<Link href="/auth/register">
+												Sign Up
+											</Link>
+										</Button>
+									</>
+								)}
+							</div>
+						)}
 						<ModeToggle />
 					</div>
 
@@ -265,6 +298,71 @@ export function Header() {
 									</SheetDescription>
 								</SheetHeader>
 								<nav className="flex flex-col space-y-2">
+									{!isLoading && (
+										<div className="px-2 py-4 mb-2 border-b">
+											{user ? (
+												<div className="flex flex-col space-y-3">
+													<div className="flex items-center gap-3 px-2">
+														<div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+															{
+																user
+																	.firstName?.[0]
+															}
+															{user.lastName?.[0]}
+														</div>
+														<div className="flex flex-col">
+															<span className="text-sm font-medium leading-none">
+																{user.name ||
+																	`${user.firstName} ${user.lastName}`}
+															</span>
+															<span className="text-xs text-muted-foreground mt-1">
+																{user.email}
+															</span>
+														</div>
+													</div>
+													<Button
+														asChild
+														variant="outline"
+														className="w-full justify-start"
+														onClick={() =>
+															setIsOpen(false)
+														}
+													>
+														<Link href="/user-account">
+															<User className="mr-2 h-4 w-4" />
+															My Account
+														</Link>
+													</Button>
+												</div>
+											) : (
+												<div className="grid grid-cols-2 gap-2">
+													<Button
+														asChild
+														variant="outline"
+														size="sm"
+														onClick={() =>
+															setIsOpen(false)
+														}
+													>
+														<Link href="/auth/login">
+															Login
+														</Link>
+													</Button>
+													<Button
+														asChild
+														size="sm"
+														onClick={() =>
+															setIsOpen(false)
+														}
+													>
+														<Link href="/auth/register">
+															Sign Up
+														</Link>
+													</Button>
+												</div>
+											)}
+										</div>
+									)}
 									{navigation.map((item) => {
 										const isActive = pathname === item.href;
 

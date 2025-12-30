@@ -328,33 +328,6 @@ export default function CoursePage() {
 												{course.language}
 											</p>
 										</div>
-										<Separator />
-										<div>
-											<p className="text-sm text-muted-foreground mb-1">
-												Price
-											</p>
-											{course.isPremium ? (
-												course.price &&
-												course.price > 0 ? (
-													<p className="text-2xl font-bold">
-														KES {course.price}
-													</p>
-												) : (
-													<Badge variant="secondary">
-														Membership Required
-													</Badge>
-												)
-											) : (
-												<Badge variant="outline">
-													Free
-												</Badge>
-											)}
-										</div>
-										<Button className="w-full" size="lg">
-											{course.isPremium
-												? "Enroll Now"
-												: "Start Learning"}
-										</Button>
 									</div>
 								</CardContent>
 							</Card>

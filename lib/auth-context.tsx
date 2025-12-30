@@ -35,6 +35,7 @@ interface RegisterData {
 	password: string;
 	phone?: string;
 	membershipTierId?: string;
+	membershipTierName?: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);

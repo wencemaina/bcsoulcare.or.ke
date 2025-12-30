@@ -26,8 +26,18 @@ export default function LoginPage() {
 	});
 	const [showPassword, setShowPassword] = useState(false);
 	const [error, setError] = useState("");
-	const { login, isLoading } = useAuth();
+	const { user, login, isLoading } = useAuth();
 	const router = useRouter();
+
+	useEffect(() => {
+		if (user) {
+			if (user.role === "admin") {
+				router.push("/admin");
+			} else {
+				router.push("/user-account");
+			}
+		}
+	}, [user, router]);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setFormData((prev) => ({
@@ -47,9 +57,7 @@ export default function LoginPage() {
 
 		const success = await login(formData.email, formData.password);
 
-		if (success) {
-			router.push("/user-account");
-		} else {
+		if (!success) {
 			setError("Invalid email or password");
 		}
 	};

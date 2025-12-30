@@ -217,22 +217,19 @@ export function Header() {
 
 									return (
 										<NavigationMenuItem key={item.name}>
-											<Link
-												href={item.href}
-												passHref
-												legacyBehavior
+											<NavigationMenuLink
+												asChild
+												className={cn(
+													navigationMenuTriggerStyle(),
+													"bg-transparent hover:bg-muted/50",
+													isActive &&
+														"text-primary font-medium bg-muted/20",
+												)}
 											>
-												<NavigationMenuLink
-													className={cn(
-														navigationMenuTriggerStyle(),
-														"bg-transparent hover:bg-muted/50",
-														isActive &&
-															"text-primary font-medium bg-muted/20",
-													)}
-												>
+												<Link href={item.href}>
 													{item.name}
-												</NavigationMenuLink>
-											</Link>
+												</Link>
+											</NavigationMenuLink>
 										</NavigationMenuItem>
 									);
 								})}

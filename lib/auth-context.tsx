@@ -1,111 +1,104 @@
-"use client"
+"use client";
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import { createContext, useContext, type ReactNode } from "react";
+import { SessionProvider, useSession, signIn, signOut } from "next-auth/react";
 
 interface User {
-  id: string
-  email: string
-  firstName: string
-  lastName: string
-  memberSince: string
-  programs: string[]
-  prayerRequests: number
+	userId: string;
+	email: string;
+	firstName: string;
+	lastName: string;
+	name?: string;
+	role: "admin" | "user";
+	createdAt: string | Date;
+	membershipTier?: {
+		name: string;
+		billingCycle: string;
+		status: string;
+	};
+	programs?: string[];
+	prayerRequests?: number;
 }
 
 interface AuthContextType {
-  user: User | null
-  login: (email: string, password: string) => Promise<boolean>
-  register: (userData: RegisterData) => Promise<boolean>
-  logout: () => void
-  isLoading: boolean
+	user: User | null;
+	login: (email: string, password: string) => Promise<boolean>;
+	register: (userData: RegisterData) => Promise<boolean>;
+	logout: () => void;
+	isLoading: boolean;
 }
 
 interface RegisterData {
-  firstName: string
-  lastName: string
-  email: string
-  password: string
-  phone?: string
+	firstName: string;
+	lastName: string;
+	email: string;
+	password: string;
+	phone?: string;
+	membershipTierId?: string;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+function AuthInternalProvider({ children }: { children: ReactNode }) {
+	const { data: session, status } = useSession();
+	const isLoading = status === "loading";
+	const user = session?.user ? (session.user as unknown as User) : null;
+
+	const login = async (email: string, password: string): Promise<boolean> => {
+		const result = await signIn("credentials", {
+			email,
+			password,
+			redirect: false,
+		});
+
+		return result?.ok || false;
+	};
+
+	const register = async (userData: RegisterData): Promise<boolean> => {
+		try {
+			const res = await fetch("/api/auth/register", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(userData),
+			});
+
+			if (res.ok) {
+				// After successful registration, sign in
+				await login(userData.email, userData.password);
+				return true;
+			}
+			return false;
+		} catch (error) {
+			console.error("Registration failed", error);
+			return false;
+		}
+	};
+
+	const logout = async () => {
+		await signOut({ callbackUrl: "/auth/login" });
+	};
+
+	return (
+		<AuthContext.Provider
+			value={{ user, login, register, logout, isLoading }}
+		>
+			{children}
+		</AuthContext.Provider>
+	);
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    // Check for existing session on mount
-    const savedUser = localStorage.getItem("faithcare-user")
-    if (savedUser) {
-      setUser(JSON.parse(savedUser))
-    }
-    setIsLoading(false)
-  }, [])
-
-  const login = async (email: string, password: string): Promise<boolean> => {
-    setIsLoading(true)
-
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    // Mock successful login
-    if (email && password) {
-      const mockUser: User = {
-        id: "1",
-        email,
-        firstName: "John",
-        lastName: "Doe",
-        memberSince: "2023-01-15",
-        programs: ["Life Groups", "Foundations of Faith"],
-        prayerRequests: 3,
-      }
-
-      setUser(mockUser)
-      localStorage.setItem("faithcare-user", JSON.stringify(mockUser))
-      setIsLoading(false)
-      return true
-    }
-
-    setIsLoading(false)
-    return false
-  }
-
-  const register = async (userData: RegisterData): Promise<boolean> => {
-    setIsLoading(true)
-
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    // Mock successful registration
-    const mockUser: User = {
-      id: "1",
-      email: userData.email,
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      memberSince: new Date().toISOString().split("T")[0],
-      programs: [],
-      prayerRequests: 0,
-    }
-
-    setUser(mockUser)
-    localStorage.setItem("faithcare-user", JSON.stringify(mockUser))
-    setIsLoading(false)
-    return true
-  }
-
-  const logout = () => {
-    setUser(null)
-    localStorage.removeItem("faithcare-user")
-  }
-
-  return <AuthContext.Provider value={{ user, login, register, logout, isLoading }}>{children}</AuthContext.Provider>
+	return (
+		<SessionProvider>
+			<AuthInternalProvider>{children}</AuthInternalProvider>
+		</SessionProvider>
+	);
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider")
-  }
-  return context
+	const context = useContext(AuthContext);
+	if (context === undefined) {
+		throw new Error("useAuth must be used within an AuthProvider");
+	}
+	return context;
 }

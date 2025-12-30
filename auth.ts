@@ -51,10 +51,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 					role: user.role,
 					createdAt: user.createdAt,
 					membershipTier: tierInfo
+						: user.membershipTierName
 						? {
-								name: tierInfo.name,
-								billingCycle: tierInfo.billingCycle,
-								status: "active", // Defaulting as we don't have per-user status in model yet, but keeping structure
+								name: user.membershipTierName,
+								billingCycle: "unknown", // Fallback for stored name only
+								status: "active",
 						  }
 						: undefined,
 				};

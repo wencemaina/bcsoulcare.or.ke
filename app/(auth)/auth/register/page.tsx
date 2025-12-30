@@ -38,8 +38,18 @@ export default function RegisterPage() {
 	const [selectedTierId, setSelectedTierId] = useState<string>("");
 	const [isLoadingTiers, setIsLoadingTiers] = useState(true);
 
-	const { register, isLoading } = useAuth();
+	const { user, register, isLoading } = useAuth();
 	const router = useRouter();
+
+	useEffect(() => {
+		if (user) {
+			if (user.role === "admin") {
+				router.push("/admin");
+			} else {
+				router.push("/user-account");
+			}
+		}
+	}, [user, router]);
 
 	useEffect(() => {
 		async function fetchTiers() {
@@ -103,20 +113,19 @@ export default function RegisterPage() {
 			return;
 		}
 
-		// TODO: Pass tierId to register function once updated
+		const selectedTier = tiers.find((t) => t.tierId === selectedTierId);
+
 		const success = await register({
 			firstName: formData.firstName,
 			lastName: formData.lastName,
 			email: formData.email,
 			password: formData.password,
 			phone: formData.phone,
-
 			membershipTierId: selectedTierId,
-		});
+			membershipTierName: selectedTier?.name,
+		} as any);
 
-		if (success) {
-			router.push("/user-account");
-		} else {
+		if (!success) {
 			setError("Registration failed. Please try again.");
 		}
 	};

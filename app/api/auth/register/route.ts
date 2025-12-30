@@ -75,7 +75,8 @@ export async function POST(req: NextRequest) {
 			role: "user",
 			isActive: true,
 			isVerified: false,
-			membershipTierId: tier._id,
+			membershipTierId: tier.tierId,
+			membershipTierName: tier.name,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 		};

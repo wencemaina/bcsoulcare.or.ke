@@ -169,29 +169,9 @@ export default function CoursesPage() {
 									</CardContent>
 									<Separator />
 									<CardFooter className="pt-4">
-										<div className="flex items-center justify-between w-full">
-											<div>
-												{course.isPremium ? (
-													course.price &&
-													course.price > 0 ? (
-														<p className="font-semibold text-lg">
-															KES {course.price}
-														</p>
-													) : (
-														<Badge variant="secondary">
-															Membership
-														</Badge>
-													)
-												) : (
-													<Badge variant="outline">
-														Free
-													</Badge>
-												)}
-											</div>
-											<Button size="sm">
-												View Course
-											</Button>
-										</div>
+										<Button size="sm" className="w-full">
+											View Course
+										</Button>
 									</CardFooter>
 								</Card>
 							))}

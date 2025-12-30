@@ -51,7 +51,6 @@ export default function MembershipTiersPage() {
 			archived: "secondary",
 		};
 		return (
-			// @ts-expect-error - status might be loosely typed from API
 			<Badge variant={variants[status] || "default"}>
 				{status.charAt(0).toUpperCase() + status.slice(1)}
 			</Badge>

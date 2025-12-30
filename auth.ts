@@ -51,10 +51,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 					role: user.role,
 					createdAt: user.createdAt,
 					membershipTier: tierInfo
+						? {
+								name: tierInfo.name,
+								billingCycle: tierInfo.billingCycle,
+								status: "active",
+						  }
 						: user.membershipTierName
 						? {
 								name: user.membershipTierName,
-								billingCycle: "unknown", // Fallback for stored name only
+								billingCycle: "unknown",
 								status: "active",
 						  }
 						: undefined,

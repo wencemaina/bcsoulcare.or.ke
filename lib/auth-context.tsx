@@ -22,7 +22,8 @@ interface User {
 
 interface AuthContextType {
 	user: User | null;
-	login: (email: string, password: string) => Promise<boolean>;
+	initiateLogin: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+	login: (email: string, password: string, code: string) => Promise<boolean>;
 	register: (userData: RegisterData) => Promise<boolean>;
 	logout: () => void;
 	isLoading: boolean;
@@ -45,10 +46,30 @@ function AuthInternalProvider({ children }: { children: ReactNode }) {
 	const isLoading = status === "loading";
 	const user = session?.user ? (session.user as unknown as User) : null;
 
-	const login = async (email: string, password: string): Promise<boolean> => {
+	const initiateLogin = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+		try {
+			const res = await fetch("/api/auth/login/otp", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ email, password }),
+			});
+
+			const data = await res.json();
+			if (res.ok) {
+				return { success: true };
+			}
+			return { success: false, error: data.error || "Failed to initiate login" };
+		} catch (error) {
+			console.error("Login initiation failed", error);
+			return { success: false, error: "An unexpected error occurred" };
+		}
+	};
+
+	const login = async (email: string, password: string, code: string): Promise<boolean> => {
 		const result = await signIn("credentials", {
 			email,
 			password,
+			code,
 			redirect: false,
 		});
 
@@ -64,8 +85,6 @@ function AuthInternalProvider({ children }: { children: ReactNode }) {
 			});
 
 			if (res.ok) {
-				// After successful registration, sign in
-				await login(userData.email, userData.password);
 				return true;
 			}
 			return false;
@@ -81,7 +100,7 @@ function AuthInternalProvider({ children }: { children: ReactNode }) {
 
 	return (
 		<AuthContext.Provider
-			value={{ user, login, register, logout, isLoading }}
+			value={{ user, initiateLogin, login, register, logout, isLoading }}
 		>
 			{children}
 		</AuthContext.Provider>

@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { connectToDatabase, User, MembershipTier } from "@/lib/mongodb";
 import { compare } from "bcryptjs";
+import { verifyOTP } from "@/lib/otp";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	providers: [
@@ -10,6 +11,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			credentials: {
 				email: { label: "Email", type: "email" },
 				password: { label: "Password", type: "password" },
+				code: { label: "Verification Code", type: "text" },
 			},
 			async authorize(credentials) {
 				console.log("[AUTH] Authorize called with:", credentials?.email);
@@ -41,6 +43,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
 				if (!isPasswordCorrect) {
 					console.log("[AUTH] Invalid password for:", credentials.email);
+					return null;
+				}
+
+				// 2FA Verification: Check the code if provided
+				if (!credentials.code) {
+					console.log("[AUTH] OTP code missing for 2FA");
+					return null;
+				}
+
+				const isOtpValid = await verifyOTP(credentials.email as string, credentials.code as string);
+				if (!isOtpValid) {
+					console.log("[AUTH] Invalid or expired OTP code");
 					return null;
 				}
 

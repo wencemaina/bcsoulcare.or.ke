@@ -12,16 +12,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				password: { label: "Password", type: "password" },
 			},
 			async authorize(credentials) {
+				console.log("[AUTH] Authorize called with:", credentials?.email);
 				if (!credentials?.email || !credentials?.password) {
+					console.log("[AUTH] Missing credentials");
 					return null;
 				}
 
 				const db = await connectToDatabase();
+				console.log("[AUTH] Connected to database");
 				const user = await db.collection<User>("users").findOne({
 					email: credentials.email as string,
 				});
 
-				if (!user || !user.password) {
+				if (!user) {
+					console.log("[AUTH] User not found:", credentials.email);
+					return null;
+				}
+
+				if (!user.password) {
+					console.log("[AUTH] User has no password set:", credentials.email);
 					return null;
 				}
 
@@ -31,8 +40,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				);
 
 				if (!isPasswordCorrect) {
+					console.log("[AUTH] Invalid password for:", credentials.email);
 					return null;
 				}
+
+				console.log("[AUTH] Authorization successful for:", credentials.email);
 
 				// Fetch membership tier info if applicable
 				let tierInfo;
@@ -52,17 +64,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 					createdAt: user.createdAt,
 					membershipTier: tierInfo
 						? {
-								name: tierInfo.name,
-								billingCycle: tierInfo.billingCycle,
-								status: "active",
-						  }
+							name: tierInfo.name,
+							billingCycle: tierInfo.billingCycle,
+							status: "active",
+						}
 						: user.membershipTierName
-						? {
+							? {
 								name: user.membershipTierName,
 								billingCycle: "unknown",
 								status: "active",
-						  }
-						: undefined,
+							}
+							: undefined,
 				};
 			},
 		}),
@@ -97,5 +109,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 	session: {
 		strategy: "jwt",
 	},
-	secret: process.env.AUTH_SECRET || "development-secret-key-change-me",
+	secret: process.env.AUTH_SECRET,
 });

@@ -80,13 +80,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 						? {
 							name: tierInfo.name,
 							billingCycle: tierInfo.billingCycle,
-							status: "active",
+							status: user.subscriptionStatus || "active",
+							startDate: user.subscriptionStartDate,
+							endDate: user.subscriptionEndDate,
 						}
 						: user.membershipTierName
 							? {
 								name: user.membershipTierName,
 								billingCycle: "unknown",
-								status: "active",
+								status: user.subscriptionStatus || "active",
+								startDate: user.subscriptionStartDate,
+								endDate: user.subscriptionEndDate,
 							}
 							: undefined,
 				};

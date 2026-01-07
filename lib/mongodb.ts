@@ -58,6 +58,9 @@ export interface User {
 	isVerified?: boolean;
 	membershipTierId?: string;
 	membershipTierName?: string;
+	subscriptionStartDate?: Date;
+	subscriptionEndDate?: Date;
+	subscriptionStatus?: "active" | "expired" | "canceled" | "past_due";
 	createdAt: Date;
 	updatedAt: Date;
 }

@@ -87,7 +87,7 @@ export default function RegisterPage() {
 					) : (
 						<Swiper
 							modules={[Pagination]}
-							spaceBetween={30}
+							spaceBetween={40}
 							slidesPerView={1}
 							pagination={{ clickable: true }}
 							breakpoints={{
@@ -96,9 +96,6 @@ export default function RegisterPage() {
 								},
 								1024: {
 									slidesPerView: 3,
-								},
-								1280: {
-									slidesPerView: 4,
 								},
 							}}
 							className="pb-12"

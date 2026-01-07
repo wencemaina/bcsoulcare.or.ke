@@ -65,6 +65,20 @@ export async function POST(req: NextRequest) {
 		const hashedPassword = await hash(password, 12);
 		const userId = uuid();
 
+		// Calculate subscription dates
+		const startDate = new Date();
+		let endDate = new Date();
+
+		if (tier.billingCycle === "monthly") {
+			endDate.setMonth(startDate.getMonth() + 1);
+		} else if (tier.billingCycle === "yearly") {
+			endDate.setFullYear(startDate.getFullYear() + 1);
+		} else if (tier.billingCycle === "one-time") {
+			// For one-time, maybe it's lifetime or a long duration? 
+			// Let's set it to 100 years for now, or keep it as is.
+			endDate.setFullYear(startDate.getFullYear() + 100);
+		}
+
 		const newUser: User = {
 			userId: userId,
 			firstName,
@@ -77,6 +91,9 @@ export async function POST(req: NextRequest) {
 			isVerified: false,
 			membershipTierId: tier.tierId,
 			membershipTierName: tier.name,
+			subscriptionStartDate: startDate,
+			subscriptionEndDate: endDate,
+			subscriptionStatus: "active",
 			createdAt: new Date(),
 			updatedAt: new Date(),
 		};

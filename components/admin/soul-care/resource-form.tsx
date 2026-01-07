@@ -50,8 +50,8 @@ export function ResourceForm({ initialData }: ResourceFormProps) {
         setIsLoading(true);
         try {
             const url = initialData
-                ? `/api/admin/soul-care/resources/${initialData.resourceId}`
-                : "/api/admin/soul-care/resources";
+                ? `/api/admin/resources/${initialData.resourceId}`
+                : "/api/admin/resources";
 
             const method = initialData ? "PUT" : "POST";
 
@@ -63,7 +63,7 @@ export function ResourceForm({ initialData }: ResourceFormProps) {
 
             if (res.ok) {
                 toast.success(`Resource ${initialData ? "updated" : "created"} successfully`);
-                router.push("/admin/soul-care/resources");
+                router.push("/admin/resources");
                 router.refresh();
             } else {
                 const data = await res.json();
@@ -235,7 +235,7 @@ export function ResourceForm({ initialData }: ResourceFormProps) {
                 <Button
                     type="button"
                     variant="outline"
-                    onClick={() => router.push("/admin/soul-care/resources")}
+                    onClick={() => router.push("/admin/resources")}
                     disabled={isLoading}
                 >
                     Cancel

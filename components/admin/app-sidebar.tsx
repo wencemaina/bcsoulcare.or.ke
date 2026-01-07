@@ -8,6 +8,7 @@ import {
 	TbCreditCard,
 	TbDashboard,
 	TbFiles,
+	TbHeart,
 	TbHelp,
 	TbIdBadge2,
 	TbNews,
@@ -201,6 +202,21 @@ const data = {
 					title: "Access Control",
 					url: "/admin/resources/access",
 					icon: TbFiles,
+				},
+			],
+		},
+		{
+			label: "Soul Care",
+			items: [
+				{
+					title: "Services",
+					url: "/admin/soul-care/services",
+					icon: TbHeart,
+				},
+				{
+					title: "Care Team",
+					url: "/admin/soul-care/team",
+					icon: TbUsers,
 				},
 			],
 		},

@@ -76,20 +76,30 @@ export class FormHandler {
 
   static async subscribeNewsletter(data: NewsletterData): Promise<{ success: boolean; message: string }> {
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 800))
+      const res = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-      console.log("Newsletter subscription:", data)
+      const result = await res.json();
+
+      if (res.ok) {
+        return {
+          success: true,
+          message: result.message || "Thank you for subscribing!",
+        };
+      }
 
       return {
-        success: true,
-        message: "Thank you for subscribing! You will receive our next newsletter soon.",
-      }
+        success: false,
+        message: result.error || "There was an error with your subscription. Please try again.",
+      };
     } catch (error) {
       return {
         success: false,
         message: "There was an error with your subscription. Please try again.",
-      }
+      };
     }
   }
 

@@ -168,7 +168,7 @@ export default function UserAccountPage() {
 							<Button
 								className="w-full flex items-center justify-center gap-2 group transition-all"
 								variant="default"
-								onClick={() => router.push("/auth/register")}
+								onClick={() => router.push("/user-account/membership")}
 							>
 								<RefreshCw className="h-4 w-4 group-hover:rotate-180 transition-transform duration-500" />
 								Renew or Upgrade Plan

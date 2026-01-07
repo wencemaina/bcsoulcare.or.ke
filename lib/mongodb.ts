@@ -187,3 +187,10 @@ export interface MembershipTier {
 	createdAt: Date;
 	updatedAt: Date;
 }
+
+export interface NewsletterSubscription {
+	_id?: ObjectId;
+	email: string;
+	subscribedAt: Date;
+	status: "active" | "unsubscribed";
+}

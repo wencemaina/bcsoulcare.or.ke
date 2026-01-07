@@ -17,6 +17,12 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from "@/components/ui/tabs";
 
 interface ResourceFormProps {
     initialData?: SoulCareResource | null;
@@ -25,6 +31,7 @@ interface ResourceFormProps {
 export function ResourceForm({ initialData }: ResourceFormProps) {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
     const [formData, setFormData] = useState({
         title: initialData?.title || "",
         description: initialData?.description || "",
@@ -39,6 +46,34 @@ export function ResourceForm({ initialData }: ResourceFormProps) {
         featured: initialData?.featured || false,
         status: initialData?.status || "active",
     });
+
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsUploading(true);
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const res = await fetch("/api/upload-resource", {
+                method: "POST",
+                body: formData,
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                setFormData((prev) => ({ ...prev, downloadUrl: data.url }));
+                toast.success("File uploaded successfully");
+            } else {
+                toast.error(data.error || "Upload failed");
+            }
+        } catch (error) {
+            toast.error("An error occurred during upload");
+        } finally {
+            setIsUploading(false);
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -142,21 +177,60 @@ export function ResourceForm({ initialData }: ResourceFormProps) {
                         />
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="downloadUrl">Download/Access URL</Label>
-                        <div className="flex gap-2">
-                            <Input
-                                id="downloadUrl"
-                                value={formData.downloadUrl}
-                                onChange={(e) => setFormData({ ...formData, downloadUrl: e.target.value })}
-                                placeholder="e.g. /resources/file.pdf or external link"
-                                required
-                            />
-                            {formData.downloadUrl && (
-                                <Button size="icon" variant="outline" type="button" onClick={() => window.open(formData.downloadUrl, "_blank")}>
-                                    <ExternalLink className="h-4 w-4" />
+                        <Label>Resource Content</Label>
+                        <Tabs defaultValue={formData.downloadUrl.includes("r2.cloudflarestorage.com") || !formData.downloadUrl ? "upload" : "link"} className="w-full">
+                            <TabsList className="grid w-full grid-cols-2">
+                                <TabsTrigger value="upload">Upload File</TabsTrigger>
+                                <TabsTrigger value="link">External Link</TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="upload" className="space-y-4 pt-4">
+                                <div className="flex items-center gap-4">
+                                    <Input
+                                        type="file"
+                                        onChange={handleFileUpload}
+                                        disabled={isUploading}
+                                        className="flex-1"
+                                        accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.csv,audio/*,video/*,image/*"
+                                    />
+                                    {isUploading && <Loader2 className="h-4 w-4 animate-spin" />}
+                                </div>
+                                <p className="text-xs text-muted-foreground">
+                                    Max size: 50MB. Supported: PDF, Office, Audio, Video, Images.
+                                </p>
+                            </TabsContent>
+                            <TabsContent value="link" className="pt-4">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="downloadUrl">External URL</Label>
+                                    <div className="flex gap-2">
+                                        <Input
+                                            id="downloadUrl"
+                                            value={formData.downloadUrl}
+                                            onChange={(e) => setFormData({ ...formData, downloadUrl: e.target.value })}
+                                            placeholder="https://example.com/resource"
+                                            required
+                                        />
+                                        {formData.downloadUrl && (
+                                            <Button size="icon" variant="outline" type="button" onClick={() => window.open(formData.downloadUrl, "_blank")}>
+                                                <ExternalLink className="h-4 w-4" />
+                                            </Button>
+                                        )}
+                                    </div>
+                                </div>
+                            </TabsContent>
+                        </Tabs>
+                        {formData.downloadUrl && (
+                            <div className="mt-2 p-3 bg-muted rounded-md flex items-center justify-between border border-dashed">
+                                <span className="text-xs truncate max-w-[400px] font-medium">{formData.downloadUrl}</span>
+                                <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="h-7 text-xs text-destructive hover:text-destructive hover:bg-destructive/10"
+                                    onClick={() => setFormData({ ...formData, downloadUrl: "" })}
+                                >
+                                    Clear
                                 </Button>
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 

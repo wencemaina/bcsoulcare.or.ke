@@ -220,3 +220,23 @@ export interface SoulCareTeamMember {
 	createdAt: Date;
 	updatedAt: Date;
 }
+
+export interface SoulCareResource {
+	_id?: ObjectId;
+	resourceId: string;
+	title: string;
+	description: string;
+	category: "article" | "study" | "audio" | "book" | "worksheet";
+	type: string;
+	author: string;
+	date: Date;
+	downloadUrl: string;
+	readTime?: string;
+	pages?: string;
+	duration?: string;
+	rating?: string;
+	featured: boolean;
+	status: "active" | "archived";
+	createdAt: Date;
+	updatedAt: Date;
+}

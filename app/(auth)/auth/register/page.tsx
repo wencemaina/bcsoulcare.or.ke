@@ -1,44 +1,35 @@
 "use client";
 
-import type React from "react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-	CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/lib/auth-context";
-import { Loader2, Eye, EyeOff, Check } from "lucide-react";
+import { Loader2, Check } from "lucide-react";
 import { MembershipTier } from "@/lib/mongodb";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
+
+// Swiper imports
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Navigation } from "swiper/modules";
+
+// Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 
 export default function RegisterPage() {
-	const [formData, setFormData] = useState({
-		firstName: "",
-		lastName: "",
-		email: "",
-		password: "",
-		confirmPassword: "",
-		phone: "",
-	});
-	const [showPassword, setShowPassword] = useState(false);
-	const [error, setError] = useState("");
-	const [agreedToTerms, setAgreedToTerms] = useState(false);
 	const [tiers, setTiers] = useState<MembershipTier[]>([]);
 	const [selectedTierId, setSelectedTierId] = useState<string>("");
 	const [isLoadingTiers, setIsLoadingTiers] = useState(true);
 
-	const { user, register, isLoading } = useAuth();
+	const { user } = useAuth();
 	const router = useRouter();
 
 	useEffect(() => {
@@ -58,13 +49,12 @@ export default function RegisterPage() {
 				if (response.ok) {
 					const data = await response.json();
 					setTiers(data.tiers || []);
-					// specific logic: if only one tier exists, select it automatically
 					if (data.tiers && data.tiers.length === 1) {
 						setSelectedTierId(data.tiers[0].tierId);
 					}
 				}
 			} catch (error) {
-				console.error("Failed to fetch tiers:", error);
+				// Error handled by UI state
 			} finally {
 				setIsLoadingTiers(false);
 			}
@@ -72,326 +62,146 @@ export default function RegisterPage() {
 		fetchTiers();
 	}, []);
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setFormData((prev) => ({
-			...prev,
-			[e.target.name]: e.target.value,
-		}));
-	};
-
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		setError("");
-
-		if (
-			!formData.firstName ||
-			!formData.lastName ||
-			!formData.email ||
-			!formData.password
-		) {
-			setError("Please fill in all required fields");
-			return;
-		}
-
-		if (formData.password !== formData.confirmPassword) {
-			setError("Passwords do not match");
-			return;
-		}
-
-		if (formData.password.length < 6) {
-			setError("Password must be at least 6 characters long");
-			return;
-		}
-
-		if (!agreedToTerms) {
-			setError("Please agree to the Terms of Service and Privacy Policy");
-			return;
-		}
-
-		if (!selectedTierId) {
-			setError("Please select a membership tier");
-			return;
-		}
-
-		const selectedTier = tiers.find((t) => t.tierId === selectedTierId);
-
-		const success = await register({
-			firstName: formData.firstName,
-			lastName: formData.lastName,
-			email: formData.email,
-			password: formData.password,
-			phone: formData.phone,
-			membershipTierId: selectedTierId,
-			membershipTierName: selectedTier?.name,
-		} as any);
-
-		if (!success) {
-			setError("Registration failed. Please try again.");
-		}
+	const handleContinue = () => {
+		if (!selectedTierId) return;
+		const tier = tiers.find(t => t.tierId === selectedTierId);
+		router.push(`/auth/register/details?tierId=${selectedTierId}&tierName=${encodeURIComponent(tier?.name || "")}`);
 	};
 
 	return (
-		<>
-			<main className="py-16">
-				<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-					<div className="text-center mb-10">
-						<h1 className="text-3xl font-bold tracking-tight mb-2">
-							Join Our Community
-						</h1>
-						<p className="text-muted-foreground">
-							Choose your plan and create your account to get
-							started.
-						</p>
-					</div>
-
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
-						{isLoadingTiers ? (
-							<div className="col-span-full flex justify-center py-8">
-								<Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-							</div>
-						) : (
-							tiers.map((tier) => (
-								<Card
-									key={tier.tierId}
-									className={cn(
-										"cursor-pointer transition-all border-2 relative",
-										selectedTierId === tier.tierId
-											? "border-primary shadow-lg ring-1 ring-primary"
-											: "border-border hover:border-primary/50",
-									)}
-									onClick={() =>
-										setSelectedTierId(tier.tierId)
-									}
-								>
-									{selectedTierId === tier.tierId && (
-										<div className="absolute -top-3 -right-3 bg-primary text-primary-foreground rounded-full p-1 shadow-sm">
-											<Check className="h-4 w-4" />
-										</div>
-									)}
-									<CardHeader>
-										<CardTitle>{tier.name}</CardTitle>
-										<CardDescription className="line-clamp-2">
-											{tier.description}
-										</CardDescription>
-									</CardHeader>
-									<CardContent>
-										<div className="text-2xl font-bold mb-4">
-											KES {tier.price.toLocaleString()}
-											<span className="text-sm font-normal text-muted-foreground ml-1">
-												/{tier.billingCycle}
-											</span>
-										</div>
-										<ul className="text-sm space-y-2">
-											{tier.features
-												.slice(0, 3)
-												.map((feature, i) => (
-													<li
-														key={i}
-														className="flex items-center gap-2"
-													>
-														<Check className="h-4 w-4 text-green-500 shrink-0" />
-														<span>{feature}</span>
-													</li>
-												))}
-											{tier.features.length > 3 && (
-												<li className="text-muted-foreground text-xs pl-6">
-													+ {tier.features.length - 3}{" "}
-													more...
-												</li>
-											)}
-										</ul>
-									</CardContent>
-								</Card>
-							))
-						)}
-					</div>
-
-					<Card className="max-w-md mx-auto">
-						<CardHeader>
-							<CardTitle>Account Details</CardTitle>
-							<CardDescription>
-								Enter your information to complete registration.
-							</CardDescription>
-						</CardHeader>
-						<CardContent>
-							<form onSubmit={handleSubmit} className="space-y-4">
-								{error && (
-									<Alert variant="destructive">
-										<AlertDescription>
-											{error}
-										</AlertDescription>
-									</Alert>
-								)}
-
-								<div className="grid grid-cols-2 gap-4">
-									<div className="space-y-2">
-										<Label htmlFor="firstName">
-											First Name *
-										</Label>
-										<Input
-											id="firstName"
-											name="firstName"
-											value={formData.firstName}
-											onChange={handleChange}
-											placeholder="John"
-											required
-										/>
-									</div>
-									<div className="space-y-2">
-										<Label htmlFor="lastName">
-											Last Name *
-										</Label>
-										<Input
-											id="lastName"
-											name="lastName"
-											value={formData.lastName}
-											onChange={handleChange}
-											placeholder="Doe"
-											required
-										/>
-									</div>
-								</div>
-
-								<div className="space-y-2">
-									<Label htmlFor="email">
-										Email Address *
-									</Label>
-									<Input
-										id="email"
-										name="email"
-										type="email"
-										value={formData.email}
-										onChange={handleChange}
-										placeholder="your.email@example.com"
-										required
-									/>
-								</div>
-
-								<div className="space-y-2">
-									<Label htmlFor="phone">
-										Phone Number (Optional)
-									</Label>
-									<Input
-										id="phone"
-										name="phone"
-										type="tel"
-										value={formData.phone}
-										onChange={handleChange}
-										placeholder="(555) 123-4567"
-									/>
-								</div>
-
-								<div className="space-y-2">
-									<Label htmlFor="password">Password *</Label>
-									<div className="relative">
-										<Input
-											id="password"
-											name="password"
-											type={
-												showPassword
-													? "text"
-													: "password"
-											}
-											value={formData.password}
-											onChange={handleChange}
-											placeholder="Create a secure password"
-											required
-										/>
-										<Button
-											type="button"
-											variant="ghost"
-											size="sm"
-											className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-											onClick={() =>
-												setShowPassword(!showPassword)
-											}
-										>
-											{showPassword ? (
-												<EyeOff className="h-4 w-4 text-muted-foreground" />
-											) : (
-												<Eye className="h-4 w-4 text-muted-foreground" />
-											)}
-										</Button>
-									</div>
-								</div>
-
-								<div className="space-y-2">
-									<Label htmlFor="confirmPassword">
-										Confirm Password *
-									</Label>
-									<Input
-										id="confirmPassword"
-										name="confirmPassword"
-										type="password"
-										value={formData.confirmPassword}
-										onChange={handleChange}
-										placeholder="Confirm your password"
-										required
-									/>
-								</div>
-
-								<div className="flex items-start space-x-2">
-									<input
-										type="checkbox"
-										id="terms"
-										checked={agreedToTerms}
-										onChange={(e) =>
-											setAgreedToTerms(e.target.checked)
-										}
-										className="mt-1"
-									/>
-									<Label
-										htmlFor="terms"
-										className="text-sm leading-relaxed"
-									>
-										I agree to the{" "}
-										<Link
-											href="/terms"
-											className="text-primary hover:underline"
-										>
-											Terms of Service
-										</Link>{" "}
-										and{" "}
-										<Link
-											href="/privacy"
-											className="text-primary hover:underline"
-										>
-											Privacy Policy
-										</Link>
-									</Label>
-								</div>
-
-								<Button
-									type="submit"
-									className="w-full"
-									disabled={isLoading || !selectedTierId}
-								>
-									{isLoading ? (
-										<>
-											<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-											Creating Account...
-										</>
-									) : (
-										"Create Account"
-									)}
-								</Button>
-							</form>
-
-							<div className="mt-6 text-center text-sm">
-								<span className="text-muted-foreground">
-									Already have an account?{" "}
-								</span>
-								<Link
-									href="/auth/login"
-									className="text-primary hover:underline font-medium"
-								>
-									Sign in here
-								</Link>
-							</div>
-						</CardContent>
-					</Card>
+		<main className="py-16">
+			<div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+				<div className="text-center mb-10">
+					<h1 className="text-3xl font-bold tracking-tight mb-2">
+						Join Our Community
+					</h1>
+					<p className="text-muted-foreground">
+						Choose your plan to get started.
+					</p>
 				</div>
-			</main>
-		</>
+
+				<div className="mb-10 relative px-12">
+					{isLoadingTiers ? (
+						<div className="flex justify-center py-8">
+							<Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+						</div>
+					) : (
+						<Swiper
+							modules={[Pagination, Navigation]}
+							spaceBetween={30}
+							slidesPerView={1}
+							pagination={{ clickable: true }}
+							navigation={true}
+							breakpoints={{
+								640: {
+									slidesPerView: 2,
+								},
+								1024: {
+									slidesPerView: 3,
+								},
+								1280: {
+									slidesPerView: 4,
+								},
+							}}
+							className="pb-12"
+						>
+							{tiers.map((tier) => (
+								<SwiperSlide key={tier.tierId} className="h-auto">
+									<Card
+										className={cn(
+											"cursor-pointer transition-all border-2 relative flex flex-col h-full",
+											selectedTierId === tier.tierId
+												? "border-primary shadow-lg ring-1 ring-primary"
+												: "border-border hover:border-primary/50",
+										)}
+										onClick={() =>
+											setSelectedTierId(tier.tierId)
+										}
+									>
+										{selectedTierId === tier.tierId && (
+											<div className="absolute -top-3 -right-3 bg-primary text-primary-foreground rounded-full p-1 shadow-sm z-10">
+												<Check className="h-4 w-4" />
+											</div>
+										)}
+										<CardHeader>
+											<CardTitle>{tier.name}</CardTitle>
+											<CardDescription className="line-clamp-2">
+												{tier.description}
+											</CardDescription>
+										</CardHeader>
+										<CardContent className="flex-grow">
+											<div className="text-2xl font-bold mb-4">
+												KES {tier.price.toLocaleString()}
+												<span className="text-sm font-normal text-muted-foreground ml-1">
+													/{tier.billingCycle}
+												</span>
+											</div>
+											<ul className="text-sm space-y-2">
+												{tier.features
+													.slice(0, 3)
+													.map((feature, i) => (
+														<li
+															key={i}
+															className="flex items-center gap-2"
+														>
+															<Check className="h-4 w-4 text-green-500 shrink-0" />
+															<span>{feature}</span>
+														</li>
+													))}
+												{tier.features.length > 3 && (
+													<li className="text-muted-foreground text-xs pl-6">
+														+ {tier.features.length - 3}{" "}
+														more...
+													</li>
+												)}
+											</ul>
+										</CardContent>
+									</Card>
+								</SwiperSlide>
+							))}
+						</Swiper>
+					)}
+				</div>
+
+				<div className="max-w-md mx-auto text-center">
+					<Button
+						onClick={handleContinue}
+						disabled={!selectedTierId}
+						size="lg"
+						className="w-full"
+					>
+						Continue
+					</Button>
+				</div>
+			</div>
+
+			<style jsx global>{`
+				.swiper-button-next,
+				.swiper-button-prev {
+					color: var(--primary);
+					background: white;
+					width: 40px;
+					height: 40px;
+					border-radius: 50%;
+					box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+					top: 50%;
+					transform: translateY(-50%);
+				}
+				.swiper-button-prev {
+					left: -40px;
+				}
+				.swiper-button-next {
+					right: -40px;
+				}
+				.swiper-button-next::after,
+				.swiper-button-prev::after {
+					font-size: 18px;
+					font-weight: bold;
+				}
+				.swiper-pagination-bullet-active {
+					background: var(--primary);
+				}
+			`}</style>
+		</main>
 	);
 }

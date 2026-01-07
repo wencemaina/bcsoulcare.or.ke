@@ -218,6 +218,11 @@ const data = {
 					url: "/admin/soul-care/team",
 					icon: TbUsers,
 				},
+				{
+					title: "Resources",
+					url: "/admin/soul-care/resources",
+					icon: TbBook,
+				},
 			],
 		},
 		{

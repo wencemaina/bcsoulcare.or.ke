@@ -15,6 +15,8 @@ interface User {
 		name: string;
 		billingCycle: string;
 		status: string;
+		startDate?: string | Date;
+		endDate?: string | Date;
 	};
 	programs?: string[];
 	prayerRequests?: number;

@@ -17,12 +17,11 @@ import { cn } from "@/lib/utils";
 
 // Swiper imports
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper/modules";
+import { Pagination } from "swiper/modules";
 
 // Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
-import "swiper/css/navigation";
 
 export default function RegisterPage() {
 	const [tiers, setTiers] = useState<MembershipTier[]>([]);
@@ -80,18 +79,17 @@ export default function RegisterPage() {
 					</p>
 				</div>
 
-				<div className="mb-10 relative px-12">
+				<div className="mb-10 relative px-4">
 					{isLoadingTiers ? (
 						<div className="flex justify-center py-8">
 							<Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
 						</div>
 					) : (
 						<Swiper
-							modules={[Pagination, Navigation]}
+							modules={[Pagination]}
 							spaceBetween={30}
 							slidesPerView={1}
 							pagination={{ clickable: true }}
-							navigation={true}
 							breakpoints={{
 								640: {
 									slidesPerView: 2,
@@ -176,28 +174,6 @@ export default function RegisterPage() {
 			</div>
 
 			<style jsx global>{`
-				.swiper-button-next,
-				.swiper-button-prev {
-					color: var(--primary);
-					background: white;
-					width: 40px;
-					height: 40px;
-					border-radius: 50%;
-					box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-					top: 50%;
-					transform: translateY(-50%);
-				}
-				.swiper-button-prev {
-					left: -40px;
-				}
-				.swiper-button-next {
-					right: -40px;
-				}
-				.swiper-button-next::after,
-				.swiper-button-prev::after {
-					font-size: 18px;
-					font-weight: bold;
-				}
 				.swiper-pagination-bullet-active {
 					background: var(--primary);
 				}

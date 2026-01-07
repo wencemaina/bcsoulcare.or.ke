@@ -11,21 +11,17 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { BookingForm } from "@/components/booking-form";
 import {
 	Heart,
 	Shield,
 	Clock,
 	Phone,
-	ArrowRight,
-	Calendar,
+
 	Loader2,
 } from "lucide-react";
 import { SoulCareService, SoulCareTeamMember } from "@/lib/mongodb";
-import { toast } from "sonner";
 
 export default function SoulCarePage() {
-	const [showBookingForm, setShowBookingForm] = useState(false);
 	const [services, setServices] = useState<SoulCareService[]>([]);
 	const [team, setTeam] = useState<SoulCareTeamMember[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
@@ -38,11 +34,9 @@ export default function SoulCarePage() {
 				if (res.ok) {
 					setServices(data.services);
 					setTeam(data.team);
-				} else {
-					console.error("Failed to fetch soul care data:", data.error);
 				}
 			} catch (error) {
-				console.error("Error fetching soul care data:", error);
+				// Silently fail or handle error gracefully
 			} finally {
 				setIsLoading(false);
 			}
@@ -50,42 +44,6 @@ export default function SoulCarePage() {
 
 		fetchData();
 	}, []);
-
-	if (showBookingForm) {
-		return (
-			<div className="min-h-screen">
-				<main className="py-16">
-					<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-						<div className="text-center mb-12">
-							<h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-								Book Your Appointment
-							</h1>
-							<p className="text-lg text-muted-foreground">
-								Schedule your soul care session with one of our
-								experienced counselors.
-							</p>
-							<Button
-								variant="outline"
-								onClick={() => setShowBookingForm(false)}
-								className="mt-4 bg-transparent"
-							>
-								← Back to Soul Care Services
-							</Button>
-						</div>
-						{/* Convert SoulCareTeamMember to counselor format if needed, but our model is already compatible */}
-						<BookingForm counselors={team.map(m => ({
-							id: m.memberId,
-							name: m.name,
-							title: m.title,
-							specialties: m.specialties,
-							credentials: m.credentials,
-							image: m.image
-						}))} />
-					</div>
-				</main>
-			</div>
-		);
-	}
 
 	return (
 		<div className="min-h-screen">
@@ -101,15 +59,6 @@ export default function SoulCarePage() {
 							safe, confidential environment where faith and
 							healing intersect.
 						</p>
-						<Button
-							size="lg"
-							onClick={() => setShowBookingForm(true)}
-							className="flex items-center gap-2 mx-auto"
-						>
-							<Calendar className="h-5 w-5" />
-							Book an Appointment
-							<ArrowRight className="h-4 w-4" />
-						</Button>
 					</div>
 				</section>
 
@@ -188,15 +137,6 @@ export default function SoulCarePage() {
 													{service.availability}
 												</div>
 											</div>
-											<Button
-												className="w-full flex items-center justify-center gap-2"
-												onClick={() =>
-													setShowBookingForm(true)
-												}
-											>
-												Schedule Appointment
-												<ArrowRight className="h-4 w-4" />
-											</Button>
 										</CardContent>
 									</Card>
 								))}
@@ -261,17 +201,6 @@ export default function SoulCarePage() {
 													)}
 												</div>
 											</div>
-											<Button
-												variant="outline"
-												size="sm"
-												className="w-full bg-transparent"
-												onClick={() =>
-													setShowBookingForm(true)
-												}
-											>
-												Book with{" "}
-												{counselor.name.split(" ")[0]}
-											</Button>
 										</CardContent>
 									</Card>
 								))}
@@ -295,13 +224,6 @@ export default function SoulCarePage() {
 								guidelines and HIPAA regulations to ensure your
 								privacy and safety.
 							</p>
-							<Button
-								variant="outline"
-								onClick={() => setShowBookingForm(true)}
-								className="bg-transparent"
-							>
-								Schedule Your Confidential Session
-							</Button>
 						</div>
 					</div>
 				</section>

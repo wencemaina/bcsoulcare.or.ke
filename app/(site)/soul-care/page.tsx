@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
 	Card,
@@ -19,92 +19,37 @@ import {
 	Phone,
 	ArrowRight,
 	Calendar,
+	Loader2,
 } from "lucide-react";
+import { SoulCareService, SoulCareTeamMember } from "@/lib/mongodb";
+import { toast } from "sonner";
 
 export default function SoulCarePage() {
 	const [showBookingForm, setShowBookingForm] = useState(false);
+	const [services, setServices] = useState<SoulCareService[]>([]);
+	const [team, setTeam] = useState<SoulCareTeamMember[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
 
-	const services = [
-		{
-			title: "Individual Counseling",
-			description:
-				"One-on-one sessions with licensed therapists who integrate faith and professional practice.",
-			features: [
-				"Depression & Anxiety",
-				"Trauma Recovery",
-				"Life Transitions",
-				"Relationship Issues",
-			],
-			duration: "50-minute sessions",
-			availability: "Weekdays & Evenings",
-		},
-		{
-			title: "Couples Counseling",
-			description:
-				"Strengthen your relationship with faith-based couples therapy and communication tools.",
-			features: [
-				"Communication Skills",
-				"Conflict Resolution",
-				"Intimacy & Connection",
-				"Pre-marital Preparation",
-			],
-			duration: "75-minute sessions",
-			availability: "Weekdays & Weekends",
-		},
-		{
-			title: "Family Therapy",
-			description:
-				"Whole-family approach to healing and building stronger family relationships.",
-			features: [
-				"Parenting Support",
-				"Teen Counseling",
-				"Family Dynamics",
-				"Blended Family Issues",
-			],
-			duration: "60-minute sessions",
-			availability: "After School Hours",
-		},
-		{
-			title: "Spiritual Direction",
-			description:
-				"Explore your relationship with God and discern His calling on your life.",
-			features: [
-				"Prayer Life",
-				"Spiritual Discernment",
-				"Life Purpose",
-				"Faith Questions",
-			],
-			duration: "60-minute sessions",
-			availability: "Flexible Scheduling",
-		},
-	];
+	useEffect(() => {
+		async function fetchData() {
+			try {
+				const res = await fetch("/api/soul-care");
+				const data = await res.json();
+				if (res.ok) {
+					setServices(data.services);
+					setTeam(data.team);
+				} else {
+					console.error("Failed to fetch soul care data:", data.error);
+				}
+			} catch (error) {
+				console.error("Error fetching soul care data:", error);
+			} finally {
+				setIsLoading(false);
+			}
+		}
 
-	const counselors = [
-		{
-			id: "1",
-			name: "Dr. Mary Njeri", // Updated to Kenyan name
-			title: "Clinical Director",
-			specialties: ["Trauma", "Anxiety", "Depression"],
-			credentials: "PhD, LMFT, EMDR Certified",
-			image: "/professional-therapist-woman.png",
-		},
-		{
-			id: "2",
-			name: "Dr. Samuel Mwangi", // Updated to Kenyan name
-			title: "Marriage & Family Therapist",
-			specialties: ["Couples", "Family", "Addiction"],
-			credentials: "PsyD, LMFT, CSAT",
-			image: "/professional-therapist-man.png",
-		},
-		{
-			id: "3",
-			name: "Ruth Akinyi", // Updated to Kenyan name
-			title: "Spiritual Director",
-			specialties: ["Spiritual Formation", "Discernment", "Prayer"],
-			credentials: "MDiv, Certified Spiritual Director",
-			image: "/spiritual-director-woman.png",
-		},
-	];
+		fetchData();
+	}, []);
 
 	if (showBookingForm) {
 		return (
@@ -127,7 +72,15 @@ export default function SoulCarePage() {
 								← Back to Soul Care Services
 							</Button>
 						</div>
-						<BookingForm counselors={counselors} />
+						{/* Convert SoulCareTeamMember to counselor format if needed, but our model is already compatible */}
+						<BookingForm counselors={team.map(m => ({
+							id: m.memberId,
+							name: m.name,
+							title: m.title,
+							specialties: m.specialties,
+							credentials: m.credentials,
+							image: m.image
+						}))} />
 					</div>
 				</main>
 			</div>
@@ -170,9 +123,10 @@ export default function SoulCarePage() {
 									Crisis Support Available 24/7
 								</span>
 							</div>
-							<Button variant="destructive" size="sm">
-								Call +254 712 911 111{" "}
-								{/* Updated crisis hotline to Kenyan format */}
+							<Button variant="destructive" size="sm" asChild>
+								<a href="tel:+254712911111">
+									Call +254 712 911 111
+								</a>
 							</Button>
 						</div>
 					</div>
@@ -184,62 +138,70 @@ export default function SoulCarePage() {
 						<h2 className="text-3xl font-bold text-foreground mb-12 text-center">
 							Our Services
 						</h2>
-						<div className="grid md:grid-cols-2 gap-8">
-							{services.map((service, index) => (
-								<Card key={index} className="h-full">
-									<CardHeader>
-										<CardTitle className="text-xl flex items-center gap-2">
-											<Heart className="h-5 w-5 text-primary" />
-											{service.title}
-										</CardTitle>
-										<CardDescription className="text-base leading-relaxed">
-											{service.description}
-										</CardDescription>
-									</CardHeader>
-									<CardContent className="space-y-4">
-										<div>
-											<h4 className="font-medium text-foreground mb-2">
-												Areas of Focus:
-											</h4>
-											<div className="flex flex-wrap gap-2">
-												{service.features.map(
-													(feature, idx) => (
-														<Badge
-															key={idx}
-															variant="secondary"
-															className="text-xs"
-														>
-															{feature}
-														</Badge>
-													),
-												)}
-											</div>
-										</div>
-										<div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
-											<div className="flex items-center gap-2">
-												<Clock className="h-4 w-4" />
-												<span>{service.duration}</span>
-											</div>
+						{isLoading ? (
+							<div className="flex items-center justify-center py-20">
+								<Loader2 className="h-8 w-8 animate-spin text-primary" />
+							</div>
+						) : services.length === 0 ? (
+							<p className="text-center text-muted-foreground py-20">No services currently available.</p>
+						) : (
+							<div className="grid md:grid-cols-2 gap-8">
+								{services.map((service, index) => (
+									<Card key={index} className="h-full">
+										<CardHeader>
+											<CardTitle className="text-xl flex items-center gap-2">
+												<Heart className="h-5 w-5 text-primary" />
+												{service.title}
+											</CardTitle>
+											<CardDescription className="text-base leading-relaxed">
+												{service.description}
+											</CardDescription>
+										</CardHeader>
+										<CardContent className="space-y-4">
 											<div>
-												<span className="font-medium">
-													Available:
-												</span>{" "}
-												{service.availability}
+												<h4 className="font-medium text-foreground mb-2">
+													Areas of Focus:
+												</h4>
+												<div className="flex flex-wrap gap-2">
+													{service.features.map(
+														(feature, idx) => (
+															<Badge
+																key={idx}
+																variant="secondary"
+																className="text-xs"
+															>
+																{feature}
+															</Badge>
+														),
+													)}
+												</div>
 											</div>
-										</div>
-										<Button
-											className="w-full flex items-center justify-center gap-2"
-											onClick={() =>
-												setShowBookingForm(true)
-											}
-										>
-											Schedule Appointment
-											<ArrowRight className="h-4 w-4" />
-										</Button>
-									</CardContent>
-								</Card>
-							))}
-						</div>
+											<div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
+												<div className="flex items-center gap-2">
+													<Clock className="h-4 w-4" />
+													<span>{service.duration}</span>
+												</div>
+												<div>
+													<span className="font-medium">
+														Available:
+													</span>{" "}
+													{service.availability}
+												</div>
+											</div>
+											<Button
+												className="w-full flex items-center justify-center gap-2"
+												onClick={() =>
+													setShowBookingForm(true)
+												}
+											>
+												Schedule Appointment
+												<ArrowRight className="h-4 w-4" />
+											</Button>
+										</CardContent>
+									</Card>
+								))}
+							</div>
+						)}
 					</div>
 				</section>
 
@@ -249,64 +211,72 @@ export default function SoulCarePage() {
 						<h2 className="text-3xl font-bold text-foreground mb-12 text-center">
 							Our Care Team
 						</h2>
-						<div className="grid md:grid-cols-3 gap-8">
-							{counselors.map((counselor, index) => (
-								<Card key={index} className="text-center">
-									<CardHeader>
-										<div className="mx-auto mb-4">
-											<img
-												src={
-													counselor.image ||
-													"/placeholder.svg"
-												}
-												alt={counselor.name}
-												className="w-24 h-24 rounded-full object-cover mx-auto"
-											/>
-										</div>
-										<CardTitle className="text-lg">
-											{counselor.name}
-										</CardTitle>
-										<CardDescription>
-											{counselor.title}
-										</CardDescription>
-										<p className="text-xs text-muted-foreground mt-1">
-											{counselor.credentials}
-										</p>
-									</CardHeader>
-									<CardContent>
-										<div className="mb-4">
-											<h4 className="font-medium text-sm mb-2">
-												Specialties:
-											</h4>
-											<div className="flex flex-wrap gap-1 justify-center">
-												{counselor.specialties.map(
-													(specialty, idx) => (
-														<Badge
-															key={idx}
-															variant="outline"
-															className="text-xs"
-														>
-															{specialty}
-														</Badge>
-													),
-												)}
+						{isLoading ? (
+							<div className="flex items-center justify-center py-20">
+								<Loader2 className="h-8 w-8 animate-spin text-primary" />
+							</div>
+						) : team.length === 0 ? (
+							<p className="text-center text-muted-foreground py-20">Our care team is currently being updated.</p>
+						) : (
+							<div className="grid md:grid-cols-3 gap-8">
+								{team.map((counselor, index) => (
+									<Card key={index} className="text-center">
+										<CardHeader>
+											<div className="mx-auto mb-4">
+												<img
+													src={
+														counselor.image ||
+														"/placeholder.svg"
+													}
+													alt={counselor.name}
+													className="w-24 h-24 rounded-full object-cover mx-auto"
+												/>
 											</div>
-										</div>
-										<Button
-											variant="outline"
-											size="sm"
-											className="w-full bg-transparent"
-											onClick={() =>
-												setShowBookingForm(true)
-											}
-										>
-											Book with{" "}
-											{counselor.name.split(" ")[0]}
-										</Button>
-									</CardContent>
-								</Card>
-							))}
-						</div>
+											<CardTitle className="text-lg">
+												{counselor.name}
+											</CardTitle>
+											<CardDescription>
+												{counselor.title}
+											</CardDescription>
+											<p className="text-xs text-muted-foreground mt-1">
+												{counselor.credentials}
+											</p>
+										</CardHeader>
+										<CardContent>
+											<div className="mb-4">
+												<h4 className="font-medium text-sm mb-2">
+													Specialties:
+												</h4>
+												<div className="flex flex-wrap gap-1 justify-center">
+													{counselor.specialties.map(
+														(specialty, idx) => (
+															<Badge
+																key={idx}
+																variant="outline"
+																className="text-xs"
+															>
+																{specialty}
+															</Badge>
+														),
+													)}
+												</div>
+											</div>
+											<Button
+												variant="outline"
+												size="sm"
+												className="w-full bg-transparent"
+												onClick={() =>
+													setShowBookingForm(true)
+												}
+											>
+												Book with{" "}
+												{counselor.name.split(" ")[0]}
+											</Button>
+										</CardContent>
+									</Card>
+								))}
+							</div>
+						)}
 					</div>
 				</section>
 

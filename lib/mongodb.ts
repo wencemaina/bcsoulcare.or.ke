@@ -194,3 +194,29 @@ export interface NewsletterSubscription {
 	subscribedAt: Date;
 	status: "active" | "unsubscribed";
 }
+
+export interface SoulCareService {
+	_id?: ObjectId;
+	serviceId: string;
+	title: string;
+	description: string;
+	features: string[];
+	duration: string;
+	availability: string;
+	status: "active" | "archived";
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+export interface SoulCareTeamMember {
+	_id?: ObjectId;
+	memberId: string;
+	name: string;
+	title: string;
+	specialties: string[];
+	credentials: string;
+	image: string; // URL from R2
+	status: "active" | "archived";
+	createdAt: Date;
+	updatedAt: Date;
+}

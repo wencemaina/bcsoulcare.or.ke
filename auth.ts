@@ -47,16 +47,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				}
 
 				// 2FA Verification: Check the code if provided
-				if (!credentials.code) {
-					console.log("[AUTH] OTP code missing for 2FA");
-					return null;
-				}
+				// 2FA Verification: Check the code if provided
+				// if (!credentials.code) {
+				// 	console.log("[AUTH] OTP code missing for 2FA");
+				// 	return null;
+				// }
 
-				const isOtpValid = await verifyOTP(credentials.email as string, credentials.code as string);
-				if (!isOtpValid) {
-					console.log("[AUTH] Invalid or expired OTP code");
-					return null;
-				}
+				// const isOtpValid = await verifyOTP(credentials.email as string, credentials.code as string);
+				// if (!isOtpValid) {
+				// 	console.log("[AUTH] Invalid or expired OTP code");
+				// 	return null;
+				// }
 
 				console.log("[AUTH] Authorization successful for:", credentials.email);
 

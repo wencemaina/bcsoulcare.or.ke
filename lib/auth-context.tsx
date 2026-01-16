@@ -25,7 +25,7 @@ interface User {
 interface AuthContextType {
 	user: User | null;
 	initiateLogin: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
-	login: (email: string, password: string, code: string) => Promise<boolean>;
+	login: (email: string, password: string, code?: string) => Promise<boolean>;
 	register: (userData: RegisterData) => Promise<boolean>;
 	logout: () => void;
 	isLoading: boolean;
@@ -67,11 +67,11 @@ function AuthInternalProvider({ children }: { children: ReactNode }) {
 		}
 	};
 
-	const login = async (email: string, password: string, code: string): Promise<boolean> => {
+	const login = async (email: string, password: string, code?: string): Promise<boolean> => {
 		const result = await signIn("credentials", {
 			email,
 			password,
-			code,
+			code: code || "",
 			redirect: false,
 		});
 

@@ -14,7 +14,7 @@ export default function ContactPage() {
 		{
 			icon: Mail,
 			title: "Email",
-			details: "info@ccmwa.org", // Updated email domain to CCMWA
+			details: "info@bcsoulcare.or.ke", // Updated email domain to bcsoulcare
 			description: "We respond within 24 hours",
 		},
 		{

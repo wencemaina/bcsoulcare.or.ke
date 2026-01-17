@@ -208,6 +208,25 @@ export interface SoulCareService {
 	updatedAt: Date;
 }
 
+export interface BlogPost {
+	_id?: ObjectId;
+	blogId: string; // Unique 8-character ID
+	slug: string; // URL-friendly title
+	title: string;
+	excerpt: string;
+	content: string; // HTML content from Tiptap
+	author: string;
+	authorId: string; // References User.userId
+	category: string;
+	tags: string[];
+	image?: string;
+	status: "draft" | "published" | "archived";
+	readTime?: string;
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+
 export interface SoulCareTeamMember {
 	_id?: ObjectId;
 	memberId: string;

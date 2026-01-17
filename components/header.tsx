@@ -96,7 +96,7 @@ export function Header() {
 		},
 		{ name: "Soul Care", href: "/soul-care" },
 		{ name: "Courses", href: "/courses" },
-		{ name: "Resources", href: "/resources" },
+		{ name: "Blog", href: "/blog" },
 		{ name: "Events", href: "/events" },
 		{
 			name: "Support Us",
@@ -186,7 +186,7 @@ export function Header() {
 													className={cn(
 														"h-9 px-4 bg-transparent hover:bg-muted/50 data-[state=open]:bg-muted/50",
 														isActive &&
-															"text-primary font-medium",
+														"text-primary font-medium",
 													)}
 												>
 													{item.name}
@@ -226,7 +226,7 @@ export function Header() {
 													navigationMenuTriggerStyle(),
 													"bg-transparent hover:bg-muted/50",
 													isActive &&
-														"text-primary font-medium bg-muted/20",
+													"text-primary font-medium bg-muted/20",
 												)}
 											>
 												<Link href={item.href}>

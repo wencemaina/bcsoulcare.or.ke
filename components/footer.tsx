@@ -78,7 +78,7 @@ export function Footer() {
 								{ name: "Programs", href: "/programs" },
 								{ name: "Soul Care", href: "/soul-care" },
 								{ name: "Events", href: "/events" },
-								{ name: "Resources", href: "/resources" },
+								{ name: "Blog", href: "/blog" },
 							].map((link) => (
 								<Link
 									key={link.name}
@@ -104,7 +104,7 @@ export function Footer() {
 							<div className="flex items-center gap-3 text-sm">
 								<Mail className="h-4 w-4 text-accent" />
 								<span className="text-white/80">
-									info@ccmwa.org
+									info@bcsoulcare.or.ke
 								</span>
 							</div>
 							<div className="flex items-start gap-3 text-sm">

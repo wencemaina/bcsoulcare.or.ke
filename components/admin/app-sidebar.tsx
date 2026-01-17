@@ -235,16 +235,6 @@ const data = {
 					url: "/admin/blog/new",
 					icon: TbNews,
 				},
-				{
-					title: "Categories & Tags",
-					url: "/admin/blog/categories",
-					icon: TbNews,
-				},
-				{
-					title: "Comments",
-					url: "/admin/blog/comments",
-					icon: TbNews,
-				},
 			],
 		},
 		{

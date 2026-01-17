@@ -1,8 +1,4 @@
-import { ChartAreaInteractive } from "@/components/admin/chart-area-interactive";
-import { DataTable } from "@/components/admin/data-table";
-import { SectionCards } from "@/components/admin/section-cards";
 import { AppVersion } from "@/components/admin/app-version";
-import data from "./data.json";
 
 export default function Page() {
 	return (
@@ -10,11 +6,6 @@ export default function Page() {
 			<div className="px-4 lg:px-6 flex justify-end">
 				<AppVersion />
 			</div>
-			<SectionCards />
-			<div className="px-4 lg:px-6">
-				<ChartAreaInteractive />
-			</div>
-			<DataTable data={data} />
 		</div>
 	);
 }

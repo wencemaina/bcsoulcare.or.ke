@@ -94,6 +94,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 								endDate: user.subscriptionEndDate,
 							}
 							: undefined,
+					membershipTierId: user.membershipTierId,
 				};
 			},
 		}),
@@ -106,6 +107,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				token.firstName = (user as any).firstName;
 				token.lastName = (user as any).lastName;
 				token.membershipTier = (user as any).membershipTier;
+				token.membershipTierId = (user as any).membershipTierId;
 				token.createdAt = (user as any).createdAt;
 			}
 			return token;
@@ -117,6 +119,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				(session.user as any).firstName = token.firstName;
 				(session.user as any).lastName = token.lastName;
 				(session.user as any).membershipTier = token.membershipTier;
+				(session.user as any).membershipTierId = token.membershipTierId;
 				(session.user as any).createdAt = token.createdAt;
 			}
 			return session;

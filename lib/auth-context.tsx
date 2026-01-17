@@ -18,6 +18,7 @@ interface User {
 		startDate?: string | Date;
 		endDate?: string | Date;
 	};
+	membershipTierId?: string;
 	programs?: string[];
 	prayerRequests?: number;
 }

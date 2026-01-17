@@ -4,7 +4,6 @@ import * as React from "react";
 import {
 	TbBook,
 	TbCalendarEvent,
-	TbChartBar,
 	TbCreditCard,
 	TbDashboard,
 	TbFiles,
@@ -13,7 +12,6 @@ import {
 	TbIdBadge2,
 	TbNews,
 	TbSchool,
-	TbSettings,
 	TbTools,
 	TbUsers,
 } from "react-icons/tb";
@@ -297,76 +295,6 @@ const data = {
 					title: "Settings",
 					url: "/admin/payments/settings",
 					icon: TbCreditCard,
-				},
-			],
-		},
-		{
-			label: "Analytics",
-			items: [
-				{
-					title: "Overview",
-					url: "/admin/analytics",
-					icon: TbChartBar,
-				},
-				{
-					title: "User Growth",
-					url: "/admin/analytics/users",
-					icon: TbChartBar,
-				},
-				{
-					title: "Course Performance",
-					url: "/admin/analytics/courses",
-					icon: TbChartBar,
-				},
-				{
-					title: "Revenue",
-					url: "/admin/analytics/revenue",
-					icon: TbChartBar,
-				},
-				{
-					title: "Engagement",
-					url: "/admin/analytics/engagement",
-					icon: TbChartBar,
-				},
-				{
-					title: "Export",
-					url: "/admin/analytics/export",
-					icon: TbChartBar,
-				},
-			],
-		},
-		{
-			label: "Settings",
-			items: [
-				{
-					title: "Site Settings",
-					url: "/admin/settings",
-					icon: TbSettings,
-				},
-				{
-					title: "Email Templates",
-					url: "/admin/settings/email",
-					icon: TbSettings,
-				},
-				{
-					title: "Payment Gateways",
-					url: "/admin/settings/payments",
-					icon: TbSettings,
-				},
-				{
-					title: "Notifications",
-					url: "/admin/settings/notifications",
-					icon: TbSettings,
-				},
-				{
-					title: "API Keys",
-					url: "/admin/settings/api",
-					icon: TbSettings,
-				},
-				{
-					title: "Integrations",
-					url: "/admin/settings/integrations",
-					icon: TbSettings,
 				},
 			],
 		},

@@ -1,5 +1,4 @@
 import { connectToDatabase } from "./mongodb";
-import { crypto } from "jose"; // or use crypto.randomInt but jose is already a dependency
 
 export interface VerificationCode {
     email: string;

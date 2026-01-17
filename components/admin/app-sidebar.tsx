@@ -4,7 +4,6 @@ import * as React from "react";
 import {
 	TbBook,
 	TbCalendarEvent,
-	TbCreditCard,
 	TbDashboard,
 	TbFiles,
 	TbHeart,
@@ -44,31 +43,6 @@ const data = {
 					title: "Overview",
 					url: "/admin",
 					icon: TbDashboard,
-				},
-			],
-		},
-		{
-			label: "Users",
-			items: [
-				{
-					title: "All Users",
-					url: "/admin/users",
-					icon: TbUsers,
-				},
-				{
-					title: "Add New User",
-					url: "/admin/users/new",
-					icon: TbUsers,
-				},
-				{
-					title: "Roles & Permissions",
-					url: "/admin/users/roles",
-					icon: TbUsers,
-				},
-				{
-					title: "Banned Users",
-					url: "/admin/users/banned",
-					icon: TbUsers,
 				},
 			],
 		},
@@ -270,31 +244,6 @@ const data = {
 					title: "Comments",
 					url: "/admin/blog/comments",
 					icon: TbNews,
-				},
-			],
-		},
-		{
-			label: "Payments",
-			items: [
-				{
-					title: "Transactions",
-					url: "/admin/payments/transactions",
-					icon: TbCreditCard,
-				},
-				{
-					title: "Revenue Reports",
-					url: "/admin/payments/reports",
-					icon: TbCreditCard,
-				},
-				{
-					title: "Refunds",
-					url: "/admin/payments/refunds",
-					icon: TbCreditCard,
-				},
-				{
-					title: "Settings",
-					url: "/admin/payments/settings",
-					icon: TbCreditCard,
 				},
 			],
 		},

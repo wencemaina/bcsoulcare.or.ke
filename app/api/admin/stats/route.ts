@@ -22,19 +22,12 @@ export async function GET() {
 			eventCount,
 			membershipTierCount,
 			blogPosts,
-			recentUsers,
 		] = await Promise.all([
 			db.collection<User>("users").countDocuments({ role: "user" }),
 			db.collection<Course>("courses").countDocuments({}),
 			db.collection<Event>("events").countDocuments({}),
 			db.collection<MembershipTier>("membership_tiers").countDocuments({}),
 			db.collection<BlogPost>("blog_posts").find({}).project({ status: 1 }).toArray(),
-			db.collection<User>("users")
-				.find({ role: "user" })
-				.sort({ createdAt: -1 })
-				.limit(10)
-				.project({ password: 0 }) // Exclude passwords
-				.toArray(),
 		]);
 
 		const publishedBlogPosts = blogPosts.filter(post => post.status === "published").length;
@@ -50,7 +43,6 @@ export async function GET() {
 				published: publishedBlogPosts,
 				draft: draftBlogPosts,
 			},
-			recentUsers,
 		});
 	} catch (error) {
 		console.error("Error fetching admin stats:", error);

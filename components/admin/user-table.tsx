@@ -9,7 +9,9 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface User {
     userId: string;
@@ -21,24 +23,48 @@ interface User {
     createdAt: string | Date;
 }
 
-export function UserTable({ users }: { users: User[] | null }) {
-    if (!users) {
-        return (
-            <Card className="mt-6">
-                <CardHeader>
-                    <CardTitle>Recent Users</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div className="h-48 bg-muted/50 animate-pulse rounded-md" />
-                </CardContent>
-            </Card>
-        );
-    }
+interface UserTableProps {
+    users: User[] | null;
+    currentPage: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
+    isLoading?: boolean;
+}
 
+export function UserTable({
+    users,
+    currentPage,
+    totalPages,
+    onPageChange,
+    isLoading
+}: UserTableProps) {
     return (
         <Card className="mt-6">
-            <CardHeader>
-                <CardTitle>Recent Users</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle>Users</CardTitle>
+                <div className="flex items-center gap-2">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => onPageChange(currentPage - 1)}
+                        disabled={currentPage <= 1 || isLoading}
+                    >
+                        <ChevronLeft className="h-4 w-4" />
+                        Previous
+                    </Button>
+                    <span className="text-sm font-medium">
+                        Page {currentPage} of {totalPages || 1}
+                    </span>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => onPageChange(currentPage + 1)}
+                        disabled={currentPage >= totalPages || isLoading}
+                    >
+                        Next
+                        <ChevronRight className="h-4 w-4" />
+                    </Button>
+                </div>
             </CardHeader>
             <CardContent>
                 <Table>
@@ -52,7 +78,15 @@ export function UserTable({ users }: { users: User[] | null }) {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {users.length === 0 ? (
+                        {isLoading ? (
+                            [...Array(5)].map((_, i) => (
+                                <TableRow key={i}>
+                                    <TableCell colSpan={5}>
+                                        <div className="h-6 bg-muted animate-pulse rounded" />
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        ) : !users || users.length === 0 ? (
                             <TableRow>
                                 <TableCell
                                     colSpan={5}

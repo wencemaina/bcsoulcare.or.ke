@@ -363,6 +363,7 @@ export const handleImageUpload = async (
   onProgress?: (event: { progress: number }) => void,
   abortSignal?: AbortSignal
 ): Promise<string> => {
+  console.log("Starting image upload for file:", file.name, "Size:", file.size);
   // Validate file
   if (!file) {
     throw new Error("No file provided")
@@ -377,21 +378,29 @@ export const handleImageUpload = async (
   const formData = new FormData()
   formData.append("file", file)
 
-  const response = await fetch("/api/upload-image", {
-    method: "POST",
-    body: formData,
-    signal: abortSignal,
-  })
+  try {
+    console.log("Fetching /api/upload-image...");
+    const response = await fetch("/api/upload-image", {
+      method: "POST",
+      body: formData,
+      signal: abortSignal,
+    })
 
-  const data = await response.json()
+    const data = await response.json()
+    console.log("Upload API response:", data);
 
-  if (!response.ok) {
-    throw new Error(data.error || "Upload failed")
+    if (!response.ok) {
+      throw new Error(data.error || "Upload failed")
+    }
+
+    onProgress?.({ progress: 100 })
+    console.log("Upload successful, URL:", data.url);
+
+    return data.url
+  } catch (error) {
+    console.error("Error in handleImageUpload:", error);
+    throw error;
   }
-
-  onProgress?.({ progress: 100 })
-
-  return data.url
 }
 
 type ProtocolOptions = {

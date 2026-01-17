@@ -1,7 +1,5 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 import Link from "next/link"
@@ -104,71 +102,32 @@ export default function BlogPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <div className="max-w-4xl mx-auto space-y-12">
         {/* Main Feed */}
-        <div className="lg:col-span-2 space-y-12">
-          {articles.map((article) => (
-            <article key={article.slug} className="flex flex-col md:flex-row gap-8 group">
-              <div className="w-full md:w-2/5 aspect-video md:aspect-square relative rounded-2xl overflow-hidden border shrink-0">
-                <Image
-                  src={article.image || "/placeholder.svg"}
-                  alt={article.title}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-              </div>
-              <div className="space-y-4 py-2">
-                <div className="flex items-center gap-3">
-                  <Badge variant="secondary" className="bg-primary/10 text-primary border-none">
-                    {article.category}
-                  </Badge>
-                </div>
-                <h2 className="text-2xl font-bold leading-tight group-hover:text-primary transition-colors">
-                  <Link href={`/blog/${article.slug}`}>{article.title}</Link>
-                </h2>
-                <p className="text-muted-foreground leading-relaxed">{article.excerpt}</p>
-
-              </div>
-            </article>
-          ))}
-        </div>
-
-        {/* Sidebar */}
-        <aside className="space-y-8">
-          <Card className="border-border">
-            <CardHeader>
-              <CardTitle>Newsletter</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-muted-foreground">
-                Get monthly insights and event notifications delivered to your inbox.
-              </p>
-              <div className="space-y-2">
-                <input
-                  type="email"
-                  placeholder="email@example.com"
-                  className="w-full h-10 px-3 rounded-md border bg-background text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-                <Button className="w-full">Subscribe</Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          <div className="space-y-4">
-            <h3 className="font-bold text-lg px-2">Popular Categories</h3>
-            <div className="flex flex-wrap gap-2 px-2">
-              {["Incubation", "Sustainability", "Funding", "Agri-Tech", "Scaling", "Digital"].map((cat) => (
-                <Link
-                  key={cat}
-                  href="#"
-                  className="px-3 py-1 text-sm bg-muted hover:bg-primary hover:text-primary-foreground rounded-full transition-colors"
-                >
-                  {cat}
-                </Link>
-              ))}
+        {articles.map((article) => (
+          <article key={article.slug} className="flex flex-col md:flex-row gap-8 group">
+            <div className="w-full md:w-2/5 aspect-video md:aspect-square relative rounded-2xl overflow-hidden border shrink-0">
+              <Image
+                src={article.image || "/placeholder.svg"}
+                alt={article.title}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
             </div>
-          </div>
-        </aside>
+            <div className="space-y-4 py-2">
+              <div className="flex items-center gap-3">
+                <Badge variant="secondary" className="bg-primary/10 text-primary border-none">
+                  {article.category}
+                </Badge>
+              </div>
+              <h2 className="text-2xl font-bold leading-tight group-hover:text-primary transition-colors">
+                <Link href={`/blog/${article.slug}`}>{article.title}</Link>
+              </h2>
+              <p className="text-muted-foreground leading-relaxed">{article.excerpt}</p>
+
+            </div>
+          </article>
+        ))}
       </div>
     </div>
   )

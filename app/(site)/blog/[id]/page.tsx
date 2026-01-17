@@ -5,10 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
 	ArrowLeft,
-	Share2,
-	Facebook,
-	Twitter,
-	Linkedin,
 } from "lucide-react";
 import React from "react";
 import { connectToDatabase } from "@/lib/mongodb";
@@ -60,16 +56,7 @@ export default async function BlogDetailPage({
 						{article.title}
 					</h1>
 
-					{/* Header actions */}
 					<div className="flex items-center justify-end mb-8 pb-8 border-b">
-
-						{/* Share buttons */}
-						<div className="flex items-center gap-2">
-							<Button variant="outline" size="sm">
-								<Share2 className="h-4 w-4 mr-2" />
-								Share
-							</Button>
-						</div>
 					</div>
 
 					{/* Featured Image */}
@@ -97,38 +84,6 @@ export default async function BlogDetailPage({
 						/>
 					</div>
 
-					{/* Social Share Section */}
-					<div className="mt-16 pt-8 border-t">
-						<h3 className="text-lg font-semibold mb-4">
-							Share this article
-						</h3>
-						<div className="flex gap-3">
-							<Button
-								variant="outline"
-								size="sm"
-								className="gap-2"
-							>
-								<Facebook className="h-4 w-4" />
-								Facebook
-							</Button>
-							<Button
-								variant="outline"
-								size="sm"
-								className="gap-2"
-							>
-								<Twitter className="h-4 w-4" />
-								Twitter
-							</Button>
-							<Button
-								variant="outline"
-								size="sm"
-								className="gap-2"
-							>
-								<Linkedin className="h-4 w-4" />
-								LinkedIn
-							</Button>
-						</div>
-					</div>
 
 					{/* Related Articles */}
 					<div className="mt-16 pt-8 border-t">

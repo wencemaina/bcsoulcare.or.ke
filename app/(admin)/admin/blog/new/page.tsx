@@ -309,46 +309,14 @@ export default function CreateBlogPostPage() {
 							{/* Category */}
 							<div className="space-y-2">
 								<Label htmlFor="category">Category *</Label>
-								<Select
+								<Input
+									id="category"
+									name="category"
 									value={formData.category}
-									onValueChange={(value) =>
-										handleSelectChange("category", value)
-									}
-								>
-									<SelectTrigger
-										id="category"
-										aria-invalid={!!errors.category}
-									>
-										<SelectValue placeholder="Select category" />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value="agriculture">
-											Agriculture
-										</SelectItem>
-										<SelectItem value="funding">
-											Funding
-										</SelectItem>
-										<SelectItem value="export">
-											Export
-										</SelectItem>
-										<SelectItem value="women">
-											Women Empowerment
-										</SelectItem>
-										<SelectItem value="climate">
-											Climate
-										</SelectItem>
-										<SelectItem value="smme">
-											SMME
-										</SelectItem>
-										<SelectItem value="cbo">CBO</SelectItem>
-										<SelectItem value="news">
-											News
-										</SelectItem>
-										<SelectItem value="events">
-											Events
-										</SelectItem>
-									</SelectContent>
-								</Select>
+									onChange={handleInputChange}
+									placeholder="e.g. Agriculture, Soul Care, Events"
+									aria-invalid={!!errors.category}
+								/>
 								{errors.category && (
 									<p className="text-sm text-destructive">
 										{errors.category}
@@ -466,7 +434,7 @@ export default function CreateBlogPostPage() {
 														);
 														alert(
 															"Failed to upload image: " +
-																err.message,
+															err.message,
 														);
 													} finally {
 														setIsSubmitting(false);

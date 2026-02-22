@@ -44,6 +44,11 @@ const data = {
 					url: "/admin",
 					icon: TbDashboard,
 				},
+				{
+					title: "Settings",
+					url: "/admin/settings",
+					icon: TbTools,
+				},
 			],
 		},
 		{
@@ -266,6 +271,25 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+	const [siteSettings, setSiteSettings] = React.useState<{ logoUrl?: string; organizationName: string }>({
+		organizationName: "CCMWA",
+	});
+
+	React.useEffect(() => {
+		const fetchSettings = async () => {
+			try {
+				const response = await fetch("/api/settings");
+				if (response.ok) {
+					const data = await response.json();
+					setSiteSettings(data);
+				}
+			} catch (error) {
+				console.error("Error fetching site settings:", error);
+			}
+		};
+		fetchSettings();
+	}, []);
+
 	return (
 		<Sidebar collapsible="offcanvas" {...props}>
 			<SidebarHeader>
@@ -273,12 +297,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 					<SidebarMenuItem>
 						<SidebarMenuButton
 							asChild
-							className="data-[slot=sidebar-menu-button]:!p-1.5"
+							className="data-[slot=sidebar-menu-button]:p-1.5!"
 						>
-							<a href="#">
-								<span className="text-base font-semibold">
-									CCMWA
-								</span>
+							<a href="/admin">
+								{siteSettings.logoUrl ? (
+									<img
+										src={siteSettings.logoUrl}
+										alt={siteSettings.organizationName}
+										className="h-6 w-auto object-contain"
+									/>
+								) : (
+									<span className="text-base font-semibold">
+										{siteSettings.organizationName}
+									</span>
+								)}
 							</a>
 						</SidebarMenuButton>
 					</SidebarMenuItem>

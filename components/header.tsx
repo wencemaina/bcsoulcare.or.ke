@@ -184,7 +184,7 @@ export function Header() {
 											<NavigationMenuItem key={item.name}>
 												<NavigationMenuTrigger
 													className={cn(
-														"h-9 px-4 bg-transparent hover:bg-muted/50 data-[state=open]:bg-muted/50",
+														"h-9 px-4 bg-transparent data-[state=open]:bg-muted/20",
 														isActive &&
 														"text-primary font-medium",
 													)}
@@ -224,7 +224,7 @@ export function Header() {
 												asChild
 												className={cn(
 													navigationMenuTriggerStyle(),
-													"bg-transparent hover:bg-muted/50",
+													"bg-transparent",
 													isActive &&
 													"text-primary font-medium bg-muted/20",
 												)}
@@ -279,7 +279,7 @@ export function Header() {
 								<Button
 									variant="ghost"
 									size="icon"
-									className="hover:bg-muted/50"
+									className="hover:bg-primary/10 hover:text-primary transition-colors"
 								>
 									<Menu className="h-6 w-6" />
 									<span className="sr-only">Toggle menu</span>
@@ -385,7 +385,7 @@ export function Header() {
 																	href={
 																		subItem.href
 																	}
-																	className="group flex items-center justify-between rounded-md px-2 py-2 text-sm text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors"
+																	className="group flex items-center justify-between rounded-md px-2 py-2 text-sm text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
 																	onClick={() =>
 																		setIsOpen(
 																			false,
@@ -414,7 +414,7 @@ export function Header() {
 													"px-2 py-2 text-lg font-medium rounded-md transition-colors",
 													isActive
 														? "text-primary bg-primary/10"
-														: "text-foreground/80 hover:text-primary hover:bg-muted/50",
+														: "text-foreground/80 hover:text-primary hover:bg-primary/10",
 												)}
 												onClick={() => setIsOpen(false)}
 											>

@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { NewsletterSignup } from "@/components/newsletter-signup";
@@ -8,9 +9,47 @@ import {
 	Mail,
 	Phone,
 	MapPin,
+	Linkedin,
 } from "lucide-react";
 
 export function Footer() {
+	const [siteSettings, setSiteSettings] = React.useState<{
+		logoUrl?: string;
+		organizationName: string;
+		contactEmail?: string;
+		contactPhone?: string;
+		socialLinks?: {
+			facebook?: string;
+			twitter?: string;
+			instagram?: string;
+			linkedin?: string;
+		};
+	}>({
+		organizationName: "CCMWA",
+	});
+
+	React.useEffect(() => {
+		const fetchSettings = async () => {
+			try {
+				const response = await fetch("/api/settings");
+				if (response.ok) {
+					const data = await response.json();
+					setSiteSettings(data);
+				}
+			} catch (error) {
+				console.error("Error fetching site settings:", error);
+			}
+		};
+		fetchSettings();
+	}, []);
+
+	const socialLinks = [
+		{ name: "Facebook", href: siteSettings.socialLinks?.facebook, icon: Facebook },
+		{ name: "Twitter", href: siteSettings.socialLinks?.twitter, icon: Twitter },
+		{ name: "Instagram", href: siteSettings.socialLinks?.instagram, icon: Instagram },
+		{ name: "LinkedIn", href: siteSettings.socialLinks?.linkedin, icon: Linkedin },
+	].filter(link => link.href);
+
 	return (
 		<footer
 			className="relative text-white"
@@ -35,37 +74,36 @@ export function Footer() {
 				<div className="grid md:grid-cols-4 gap-8">
 					{/* Organization Info */}
 					<div className="space-y-4">
-						<h3 className="text-2xl font-bold">CCMWA</h3>
+						<div className="flex items-center space-x-2">
+							{siteSettings.logoUrl ? (
+								<img
+									src={siteSettings.logoUrl}
+									alt={siteSettings.organizationName}
+									className="h-10 w-auto object-contain brightness-0 invert"
+								/>
+							) : (
+								<h3 className="text-2xl font-bold">{siteSettings.organizationName}</h3>
+							)}
+						</div>
 						<p className="text-white/80 text-sm leading-relaxed">
 							Growing together in faith and community through
 							discipleship, soul care, and authentic
 							relationships.
 						</p>
-						<div className="flex space-x-4">
-							<Button
-								variant="ghost"
-								size="sm"
-								className="text-white hover:text-accent"
-								asChild
-							>
-								<Link href="https://www.facebook.com/share/1EJheWY49n/" target="_blank" rel="noopener noreferrer">
-									<Facebook className="h-5 w-5" />
-								</Link>
-							</Button>
-							<Button
-								variant="ghost"
-								size="sm"
-								className="text-white hover:text-accent"
-							>
-								<Instagram className="h-5 w-5" />
-							</Button>
-							<Button
-								variant="ghost"
-								size="sm"
-								className="text-white hover:text-accent"
-							>
-								<Twitter className="h-5 w-5" />
-							</Button>
+						<div className="flex flex-wrap gap-2">
+							{socialLinks.map((link) => (
+								<Button
+									key={link.name}
+									variant="ghost"
+									size="sm"
+									className="text-white hover:text-accent p-2 h-auto"
+									asChild
+								>
+									<Link href={link.href!} target="_blank" rel="noopener noreferrer" title={link.name}>
+										<link.icon className="h-5 w-5" />
+									</Link>
+								</Button>
+							))}
 						</div>
 					</div>
 
@@ -95,18 +133,22 @@ export function Footer() {
 					<div className="space-y-4">
 						<h4 className="text-lg font-semibold">Contact</h4>
 						<div className="space-y-3">
-							<div className="flex items-center gap-3 text-sm">
-								<Phone className="h-4 w-4 text-accent" />
-								<span className="text-white/80">
-									+254 712 345 678
-								</span>
-							</div>
-							<div className="flex items-center gap-3 text-sm">
-								<Mail className="h-4 w-4 text-accent" />
-								<span className="text-white/80">
-									info@bcsoulcare.or.ke
-								</span>
-							</div>
+							{siteSettings.contactPhone && (
+								<div className="flex items-center gap-3 text-sm">
+									<Phone className="h-4 w-4 text-accent" />
+									<span className="text-white/80">
+										{siteSettings.contactPhone}
+									</span>
+								</div>
+							)}
+							{siteSettings.contactEmail && (
+								<div className="flex items-center gap-3 text-sm">
+									<Mail className="h-4 w-4 text-accent" />
+									<span className="text-white/80">
+										{siteSettings.contactEmail}
+									</span>
+								</div>
+							)}
 							<div className="flex items-start gap-3 text-sm">
 								<MapPin className="h-4 w-4 text-accent mt-0.5" />
 								<span className="text-white/80">
@@ -123,7 +165,7 @@ export function Footer() {
 
 				<div className="border-t border-white/20 mt-8 pt-8 text-center">
 					<p className="text-white/60 text-sm">
-						© 2024 CCMWA. All rights reserved. | Privacy Policy |
+						© {new Date().getFullYear()} {siteSettings.organizationName}. All rights reserved. | Privacy Policy |
 						Terms of Service
 					</p>
 				</div>

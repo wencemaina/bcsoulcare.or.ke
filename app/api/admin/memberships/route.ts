@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { connectToDatabase, MembershipTier } from "@/lib/mongodb";
+import { connectToDatabase } from "@/lib/mongodb";
+import { MembershipTier } from "@/types/database";
 import { v4 as uuid } from "uuid";
 
 const createTierSchema = z.object({

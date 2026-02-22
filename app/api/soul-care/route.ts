@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectToDatabase, SoulCareService, SoulCareTeamMember } from "@/lib/mongodb";
+import { connectToDatabase } from "@/lib/mongodb";
+import { SoulCareService, SoulCareTeamMember } from "@/types/database";
 
 export async function GET(req: NextRequest) {
     try {

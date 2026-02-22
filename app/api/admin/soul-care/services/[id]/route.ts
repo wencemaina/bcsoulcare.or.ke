@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectToDatabase, SoulCareService } from "@/lib/mongodb";
+import { connectToDatabase } from "@/lib/mongodb";
+import { SoulCareService } from "@/types/database";
 import { auth } from "@/auth";
 
 export async function GET(

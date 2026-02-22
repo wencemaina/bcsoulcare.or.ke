@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { connectToDatabase, User } from "@/lib/mongodb";
+import { connectToDatabase } from "@/lib/mongodb";
+import { User } from "@/types/database";
 import { generateOTP, storeOTP } from "@/lib/otp";
 import { sendOTPEmail } from "@/lib/mail";
 

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { PlanSelector } from "@/components/membership/plan-selector";
-import { MembershipTier } from "@/lib/mongodb";
+import { MembershipTier } from "@/types/database";
 
 export default function RegisterPage() {
 	const { user } = useAuth();

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { TeamMemberForm } from "@/components/admin/soul-care/team-member-form";
-import { SoulCareTeamMember } from "@/lib/mongodb";
+import { SoulCareTeamMember } from "@/types/database";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 

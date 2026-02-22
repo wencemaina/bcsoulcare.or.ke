@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { connectToDatabase, User, Course, Event, MembershipTier } from "@/lib/mongodb";
+import { connectToDatabase } from "@/lib/mongodb";
+import { User, Course, Event, MembershipTier } from "@/types/database";
 import { auth } from "@/auth";
 
 interface BlogPost {

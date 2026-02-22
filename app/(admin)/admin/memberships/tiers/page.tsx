@@ -18,7 +18,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 
-import { MembershipTier } from "@/lib/mongodb";
+import { MembershipTier } from "@/types/database";
 
 export default function MembershipTiersPage() {
 	const router = useRouter();

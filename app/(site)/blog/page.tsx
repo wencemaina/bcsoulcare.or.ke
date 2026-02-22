@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
-import { BlogPost } from "@/lib/mongodb"
+import { BlogPost } from "@/types/database";
 
 interface BlogArticle {
   _id?: string; // MongoDB ObjectId as string

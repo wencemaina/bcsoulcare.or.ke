@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { connectToDatabase, User } from "@/lib/mongodb";
+import { connectToDatabase } from "@/lib/mongodb";
+import { User } from "@/types/database";
 import { verifyOTP, deleteOTP } from "@/lib/otp";
 import { hash } from "bcryptjs";
 

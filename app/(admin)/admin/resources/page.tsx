@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
-import { SoulCareResource } from "@/lib/mongodb";
+import { SoulCareResource } from "@/types/database";
 import { toast } from "sonner";
 
 export default function ResourcesAdminPage() {

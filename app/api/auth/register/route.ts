@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-	connectToDatabase,
-	User,
-	Session,
-	MembershipTier,
-} from "@/lib/mongodb";
+import { connectToDatabase } from "@/lib/mongodb";
+import { User, Session, MembershipTier } from "@/types/database";
 import { hash } from "bcryptjs";
 import { v4 as uuid } from "uuid";
 import { SignJWT } from "jose";

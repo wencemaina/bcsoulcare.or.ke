@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
-import { SoulCareTeamMember } from "@/lib/mongodb";
+import { SoulCareTeamMember } from "@/types/database";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 

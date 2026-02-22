@@ -21,7 +21,7 @@ import {
 	User,
 	Loader2,
 } from "lucide-react";
-import { SoulCareResource } from "@/lib/mongodb";
+import { SoulCareResource } from "@/types/database";
 
 export default function ResourcesPage() {
 	const [searchTerm, setSearchTerm] = useState("");

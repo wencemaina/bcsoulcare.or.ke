@@ -19,7 +19,7 @@ import {
 
 	Loader2,
 } from "lucide-react";
-import { SoulCareService, SoulCareTeamMember } from "@/lib/mongodb";
+import { SoulCareService, SoulCareTeamMember } from "@/types/database";
 
 export default function SoulCarePage() {
 	const [services, setServices] = useState<SoulCareService[]>([]);

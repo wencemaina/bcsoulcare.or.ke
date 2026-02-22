@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectToDatabase, User } from "@/lib/mongodb";
+import { connectToDatabase } from "@/lib/mongodb";
+import { User } from "@/types/database";
 import { auth } from "@/auth";
 
 export async function GET(req: NextRequest) {

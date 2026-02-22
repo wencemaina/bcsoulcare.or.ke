@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { connectToDatabase, MembershipTier } from "@/lib/mongodb";
+import { connectToDatabase } from "@/lib/mongodb";
+import { MembershipTier } from "@/types/database";
 
 export async function GET() {
 	try {

@@ -45,7 +45,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { BlogPost } from "@/lib/mongodb";
+import { BlogPost } from "@/types/database";
 
 export default function BlogPage() {
 	const [blogs, setBlogs] = React.useState<BlogPost[]>([]);

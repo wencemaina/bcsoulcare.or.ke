@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { PlanSelector } from "@/components/membership/plan-selector";
-import { MembershipTier } from "@/lib/mongodb";
+import { MembershipTier } from "@/types/database";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";

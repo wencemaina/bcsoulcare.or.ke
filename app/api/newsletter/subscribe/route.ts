@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectToDatabase, NewsletterSubscription } from "@/lib/mongodb";
+import { connectToDatabase } from "@/lib/mongodb";
+import { NewsletterSubscription } from "@/types/database";
 
 export async function POST(req: NextRequest) {
     try {

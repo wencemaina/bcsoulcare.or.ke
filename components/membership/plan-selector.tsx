@@ -9,7 +9,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Loader2, Check } from "lucide-react";
-import { MembershipTier } from "@/lib/mongodb";
+import { MembershipTier } from "@/types/database";
 import { cn } from "@/lib/utils";
 
 // Swiper imports

@@ -215,3 +215,19 @@ export interface SoulCareResource {
 	createdAt: Date;
 	updatedAt: Date;
 }
+
+export interface SiteSettings {
+	_id?: ObjectId;
+	settingsId: "global"; // Singleton record
+	logoUrl?: string;
+	organizationName: string;
+	contactEmail?: string;
+	contactPhone?: string;
+	socialLinks?: {
+		facebook?: string;
+		twitter?: string;
+		instagram?: string;
+		linkedin?: string;
+	};
+	updatedAt: Date;
+}

@@ -176,7 +176,7 @@ export function Header() {
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<div className="flex h-16 items-center justify-between">
 					{/* Logo */}
-					<div className="flex-shrink-0">
+					<div className="shrink-0">
 						<Link
 							href="/"
 							className="group flex items-center space-x-2 transition-all duration-300"
@@ -188,7 +188,7 @@ export function Header() {
 									className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
 								/>
 							) : (
-								<span className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent hover:to-primary transition-all duration-300">
+								<span className="text-2xl font-bold bg-linear-to-r from-primary to-primary/80 bg-clip-text text-transparent hover:to-primary transition-all duration-300">
 									{siteSettings.organizationName}
 								</span>
 							)}

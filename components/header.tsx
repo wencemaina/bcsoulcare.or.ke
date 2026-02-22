@@ -31,13 +31,31 @@ export function Header() {
 	const [isScrolled, setIsScrolled] = React.useState(false);
 	const pathname = usePathname();
 	const [isOpen, setIsOpen] = React.useState(false);
-	const { user, isLoading } = useAuth();
+	const { user, isLoading: isAuthLoading } = useAuth();
+	const [siteSettings, setSiteSettings] = React.useState<{ logoUrl?: string; organizationName: string }>({
+		organizationName: "CCMWA",
+	});
 
 	React.useEffect(() => {
 		const handleScroll = () => {
 			setIsScrolled(window.scrollY > 0);
 		};
 		window.addEventListener("scroll", handleScroll);
+
+		// Fetch site settings
+		const fetchSettings = async () => {
+			try {
+				const response = await fetch("/api/settings");
+				if (response.ok) {
+					const data = await response.json();
+					setSiteSettings(data);
+				}
+			} catch (error) {
+				console.error("Error fetching site settings:", error);
+			}
+		};
+		fetchSettings();
+
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
@@ -161,11 +179,19 @@ export function Header() {
 					<div className="flex-shrink-0">
 						<Link
 							href="/"
-							className="group flex items-center space-x-2 text-2xl font-bold text-primary transition-all duration-300"
+							className="group flex items-center space-x-2 transition-all duration-300"
 						>
-							<span className="bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent hover:to-primary transition-all duration-300">
-								CCMWA
-							</span>
+							{siteSettings.logoUrl ? (
+								<img
+									src={siteSettings.logoUrl}
+									alt={siteSettings.organizationName}
+									className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+								/>
+							) : (
+								<span className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent hover:to-primary transition-all duration-300">
+									{siteSettings.organizationName}
+								</span>
+							)}
 						</Link>
 					</div>
 

@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { connectToDatabase, User, MembershipTier } from "@/lib/mongodb";
+import { connectToDatabase } from "@/lib/mongodb";
+import { User, MembershipTier } from "@/types/database";
 import { compare } from "bcryptjs";
 import { verifyOTP } from "@/lib/otp";
 

@@ -31,7 +31,7 @@ export function Header() {
 	const [isScrolled, setIsScrolled] = React.useState(false);
 	const pathname = usePathname();
 	const [isOpen, setIsOpen] = React.useState(false);
-	const { user, isLoading: isAuthLoading } = useAuth();
+	const { user, isLoading } = useAuth();
 	const [siteSettings, setSiteSettings] = React.useState<{ logoUrl?: string; organizationName: string }>({
 		organizationName: "CCMWA",
 	});

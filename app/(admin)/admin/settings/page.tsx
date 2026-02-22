@@ -229,7 +229,7 @@ export default function AdminSettingsPage() {
                             </>
                         ) : (
                             <>
-                                <TbSave className="mr-2 h-4 w-4" />
+                                <TbDeviceFloppy className="mr-2 h-4 w-4" />
                                 Save Changes
                             </>
                         )}
